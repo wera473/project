@@ -29,10 +29,16 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.awt.event.ActionEvent;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 public class TestGUI extends JFrame {
 	private JPanel contentPane;
 	
-	public Layer layer;
+	public DefaultMutableTreeNode rootNode;
+	public DefaultTreeModel fileTreeModel;
+	public JTree fileTree;
+	
+	public ArrayList<Layer> layers;
 	public ArrayList<MapPanel> mapPanel;
 	public int mapPanelX;
 	public int mapPanelY;
@@ -68,14 +74,16 @@ public class TestGUI extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 800);
 		
-		final DefaultMutableTreeNode rootNode=new DefaultMutableTreeNode(null);
-		final DefaultTreeModel fileTreeModel=new DefaultTreeModel(rootNode);
-		final JTree fileTree = new JTree(fileTreeModel);		
+		rootNode=new DefaultMutableTreeNode(null);
+		fileTreeModel=new DefaultTreeModel(rootNode);
+		fileTree = new JTree(fileTreeModel);		
 		
 		fileTree.setScrollsOnExpand(true);
 		
 		JScrollPane fileWindow=new JScrollPane(fileTree);	
 		fileWindow.setBounds(0,0,200,600);
+		
+		layers=new ArrayList();
 		
 		mapPanel=new ArrayList();
 		mapPanelX=220;
@@ -96,7 +104,29 @@ public class TestGUI extends JFrame {
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
 		JMenu mnActions = new JMenu("Actions");
-		mnFile.add(mnActions);		
+		mnFile.add(mnActions);	
+		
+		
+		JMenu mnMapAlgebra = new JMenu("MapAlgebra");
+		menuBar.add(mnMapAlgebra);
+		JMenuItem mntmLocal = new JMenuItem("Local");		
+		mnMapAlgebra.add(mntmLocal);
+		JMenuItem mntmFocal = new JMenuItem("Focal");		
+		mnMapAlgebra.add(mntmFocal);
+		JMenuItem mntmZonal = new JMenuItem("Zonal");		
+		mnMapAlgebra.add(mntmZonal);
+		
+		mntmFocal.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				FocalWindow frame = new FocalWindow(hm,layers);
+				frame.setVisible(true);
+			}
+			
+		});
+		
 
 		final JFileChooser fileChooser = new JFileChooser();
 		fileChooser.addChoosableFileFilter(new FileFilter() {
@@ -116,54 +146,20 @@ public class TestGUI extends JFrame {
 				File("."));
 		fileChooser.setMultiSelectionEnabled(true);
 		
-		//---------------open file
+		//---------------open file	
 		JMenuItem mntmOpen = new JMenuItem("Open");
-		
 		mntmOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int result = fileChooser.showOpenDialog(TestGUI.this);
 				if (result == JFileChooser.APPROVE_OPTION) {
 					File[] selectedFiles = 
 							fileChooser.getSelectedFiles();
-					for (int i = 0; i < selectedFiles.length; i++) {
+					for (int i = 0; i < selectedFiles.length; i++) {						
+						
 						String filePath=selectedFiles[i].getAbsolutePath();
 						String layerName=selectedFiles[i].getName();
 						
-						//-------------------------add file content to fileWindow
-						MutableTreeNode parentNode=new DefaultMutableTreeNode(filePath);
-						MutableTreeNode childNode=new DefaultMutableTreeNode(layerName);
-						
-						fileTreeModel.insertNodeInto(parentNode, rootNode, 0);
-						fileTreeModel.insertNodeInto(childNode, parentNode, 0);
-						
-						fileTree.expandRow(0);
-						fileTree.expandRow(1);	
-						
-						System.out.println(fileTree.getRowCount());
-						
-						System.out.println("Selected file: " + 
-								selectedFiles[i].getAbsolutePath());
-						
-						//-----------------------------display map						
-						layer = new Layer ("layer", 
-								selectedFiles[i].getAbsolutePath());
-						BufferedImage layerImage = layer.toImage();						
-						
-						MapPanel mp=new MapPanel(layerImage,scale);
-						mapPanel.add(mp);
-						contentPane.add(mp, BorderLayout.CENTER);
-						mp.setBounds(mapPanelX, mapPanelY, mp.width, mp.height);					
-						
-						if(currentLayer>-1) {
-							mapPanel.get(currentLayer).setVisible(false);							
-						}
-						
-						layerCount+=1;
-						currentLayer=layerCount-1;	
-//						System.out.println(currentLayer);
-						
-						hm.put(layerName, currentLayer);
-//						System.out.println(layerName+" "+currentLayer);
+						newFile(filePath,layerName);						
 					}
 				}
 			}
@@ -178,8 +174,8 @@ public class TestGUI extends JFrame {
 				if (result == JFileChooser.APPROVE_OPTION) {					
 					String fileName=fileChooser.getSelectedFile().getPath();
 //					String fileName=fileChooser.getSelectedFile().getName();
-					if(layer!=null) {					
-						layer.save(fileName);
+					if(layers!=null) {					
+						layers.get(currentLayer).save(fileName);
 					}
 					fileChooser.setVisible(true);					
 				}
@@ -287,6 +283,51 @@ public class TestGUI extends JFrame {
 		});
 	}
 	
+	public void newFile(String filePath, String layerName) {		
+		//-------------------------add file content to fileWindow		
+		MutableTreeNode parentNode=new DefaultMutableTreeNode(filePath);
+		MutableTreeNode childNode=new DefaultMutableTreeNode(layerName);
+		
+		fileTreeModel.insertNodeInto(parentNode, rootNode, 0);
+		fileTreeModel.insertNodeInto(childNode, parentNode, 0);
+		
+		fileTree.expandRow(0);
+		fileTree.expandRow(1);	
+		
+		System.out.println(fileTree.getRowCount());
+		
+		System.out.println("Selected file: " + 
+				filePath);
+		
+		//-----------------------------display map	
+		Layer newLayer=new Layer("layer", 
+				filePath);
+		layers.add(newLayer);
+		BufferedImage layerImage = newLayer.toImage();						
+		
+		MapPanel mp=new MapPanel(layerImage,scale);
+		mapPanel.add(mp);
+		contentPane.add(mp, BorderLayout.CENTER);
+		mp.setBounds(mapPanelX, mapPanelY, mp.width, mp.height);					
+		
+		if(currentLayer>-1) {
+			mapPanel.get(currentLayer).setVisible(false);							
+		}
+		
+		layerCount+=1;
+		currentLayer=layerCount-1;	
+//		System.out.println(currentLayer);
+		
+		hm.put(layerName, currentLayer);
+//		System.out.println(layerName+" "+currentLayer);
+	}
 	
-	
+	private class SwingAction extends AbstractAction {
+		public SwingAction() {
+			putValue(NAME, "SwingAction");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
 }
