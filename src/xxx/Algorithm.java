@@ -31,7 +31,7 @@ public class Algorithm {
 		}
 		return outLayer;
 	}
-	public Layer localVariety(Layer[] inLayers, String outLayerName) {
+	public static Layer localVariety(Layer[] inLayers, String outLayerName) {
 		int nRows = inLayers[0].nRows;
 		int nCols = inLayers[0].nCols;
 		double[] origin = inLayers[0].origin;
