@@ -9,6 +9,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 
@@ -225,6 +226,8 @@ public class FocalWindow extends JFrame {
 		});
 		
 		//-------------------------radius
+		radius=-9999; //default
+		
 		tfRadius.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -292,7 +295,12 @@ public class FocalWindow extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
 				
-				int layerIndex=hm.get(inputFile);
+				if(radius<0 || outputFileName==null) {
+					JOptionPane.showMessageDialog(new JFrame(), "fail");
+					return;
+				}
+				
+				int layerIndex=hm.get(inputFile);			
 				
 				Layer newlayer;
 				

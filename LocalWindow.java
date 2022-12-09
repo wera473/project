@@ -1,39 +1,39 @@
 package se.kth.ag2411.mapalgebra;
 
 import java.awt.EventQueue;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import java.awt.GridBagConstraints;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.HashMap;
 
-import javax.swing.SwingConstants;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JTextField;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 
-public class ZonalWindow extends JFrame {
+public class LocalWindow extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField tfOutputFile;
 
-	public String inputZonalFile;
-	public String inputValueFile;
+	public String inputFile;
 	public String outputFileName;
 	public String statisticType;
+	private JTextField tfOutputFile;
 
 	/**
 	 * Launch the application.
@@ -42,7 +42,7 @@ public class ZonalWindow extends JFrame {
 	//		EventQueue.invokeLater(new Runnable() {
 	//			public void run() {
 	//				try {
-	//					ZonalWindow frame = new ZonalWindow();
+	//					LocalWindow frame = new LocalWindow();
 	//					frame.setVisible(true);
 	//				} catch (Exception e) {
 	//					e.printStackTrace();
@@ -54,83 +54,90 @@ public class ZonalWindow extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ZonalWindow(final HashMap<String,Integer> hm,final ArrayList<Layer> layers) {
-		setTitle("zonal");
+	public LocalWindow(final HashMap<String,Integer> hm,final ArrayList<Layer> layers) {
+		setTitle("local");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setBounds(100, 100, 588, 381);
+		setBounds(100, 100, 663, 469);
 		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));	
 
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[]{230, 73, 78, 78, 0};
-		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_contentPane.columnWeights = new double[]{1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.columnWidths = new int[]{375, 86, 78, 78, 0};
+		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_contentPane.columnWeights = new double[]{1.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 
-		JLabel lblNewLabel = new JLabel("Input file (zonal data)");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		JLabel lblNewLabel = new JLabel("Input file");
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel.gridx = 0;
 		gbc_lblNewLabel.gridy = 0;
 		contentPane.add(lblNewLabel, gbc_lblNewLabel);
 
-		final JComboBox cbInputZoneFile = new JComboBox();
-		GridBagConstraints gbc_cbInputZoneFile = new GridBagConstraints();
-		gbc_cbInputZoneFile.gridwidth = 2;
-		gbc_cbInputZoneFile.insets = new Insets(0, 0, 5, 5);
-		gbc_cbInputZoneFile.fill = GridBagConstraints.HORIZONTAL;
-		gbc_cbInputZoneFile.gridx = 0;
-		gbc_cbInputZoneFile.gridy = 1;
-		contentPane.add(cbInputZoneFile, gbc_cbInputZoneFile);
+		final JComboBox cbInputFile = new JComboBox();
+		GridBagConstraints gbc_cbInputFile = new GridBagConstraints();
+		gbc_cbInputFile.insets = new Insets(0, 0, 5, 5);
+		gbc_cbInputFile.gridwidth = 2;
+		gbc_cbInputFile.fill = GridBagConstraints.HORIZONTAL;
+		gbc_cbInputFile.gridx = 0;
+		gbc_cbInputFile.gridy = 1;
+		contentPane.add(cbInputFile, gbc_cbInputFile);
 
-		JLabel lblNewLabel_1 = new JLabel("Input value file");
+		JButton btnAdd = new JButton("add");
+		GridBagConstraints gbc_btnAdd = new GridBagConstraints();
+		gbc_btnAdd.insets = new Insets(0, 0, 5, 5);
+		gbc_btnAdd.gridx = 1;
+		gbc_btnAdd.gridy = 2;
+		contentPane.add(btnAdd, gbc_btnAdd);
+
+		final DefaultListModel fileListModel = new DefaultListModel();
+		final JList listFileList = new JList(fileListModel);
+		GridBagConstraints gbc_listFileList = new GridBagConstraints();
+		gbc_listFileList.gridheight = 3;
+		gbc_listFileList.insets = new Insets(0, 0, 5, 5);
+		gbc_listFileList.fill = GridBagConstraints.BOTH;
+		gbc_listFileList.gridx = 0;
+		gbc_listFileList.gridy = 2;
+		contentPane.add(listFileList, gbc_listFileList);
+
+		JButton btnDelete = new JButton("delete");
+		GridBagConstraints gbc_btnDelete = new GridBagConstraints();
+		gbc_btnDelete.insets = new Insets(0, 0, 5, 5);
+		gbc_btnDelete.gridx = 1;
+		gbc_btnDelete.gridy = 3;
+		contentPane.add(btnDelete, gbc_btnDelete);
+
+		JLabel lblNewLabel_1 = new JLabel("Output file");
 		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
 		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_1.gridx = 0;
-		gbc_lblNewLabel_1.gridy = 2;
+		gbc_lblNewLabel_1.gridy = 5;
 		contentPane.add(lblNewLabel_1, gbc_lblNewLabel_1);
-
-		final JComboBox cbInputValueFile = new JComboBox();
-		GridBagConstraints gbc_cbInputValueFile = new GridBagConstraints();
-		gbc_cbInputValueFile.gridwidth = 2;
-		gbc_cbInputValueFile.insets = new Insets(0, 0, 5, 5);
-		gbc_cbInputValueFile.fill = GridBagConstraints.HORIZONTAL;
-		gbc_cbInputValueFile.gridx = 0;
-		gbc_cbInputValueFile.gridy = 3;
-		contentPane.add(cbInputValueFile, gbc_cbInputValueFile);
-
-		JLabel lblNewLabel_2 = new JLabel("Output file");
-		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
-		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_2.gridx = 0;
-		gbc_lblNewLabel_2.gridy = 4;
-		contentPane.add(lblNewLabel_2, gbc_lblNewLabel_2);
 
 		tfOutputFile = new JTextField();
 		GridBagConstraints gbc_tfOutputFile = new GridBagConstraints();
 		gbc_tfOutputFile.insets = new Insets(0, 0, 5, 5);
 		gbc_tfOutputFile.fill = GridBagConstraints.HORIZONTAL;
 		gbc_tfOutputFile.gridx = 0;
-		gbc_tfOutputFile.gridy = 5;
+		gbc_tfOutputFile.gridy = 6;
 		contentPane.add(tfOutputFile, gbc_tfOutputFile);
 		tfOutputFile.setColumns(10);
 
-		final JButton btnOutputFile = new JButton("choose");
+		JButton btnOutputFile = new JButton("choose");
 		GridBagConstraints gbc_btnOutputFile = new GridBagConstraints();
 		gbc_btnOutputFile.insets = new Insets(0, 0, 5, 5);
 		gbc_btnOutputFile.gridx = 1;
-		gbc_btnOutputFile.gridy = 5;
+		gbc_btnOutputFile.gridy = 6;
 		contentPane.add(btnOutputFile, gbc_btnOutputFile);
 
-		JLabel lblNewLabel_3 = new JLabel("Statistic type");
-		GridBagConstraints gbc_lblNewLabel_3 = new GridBagConstraints();
-		gbc_lblNewLabel_3.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_3.gridx = 0;
-		gbc_lblNewLabel_3.gridy = 6;
-		contentPane.add(lblNewLabel_3, gbc_lblNewLabel_3);
+		JLabel lblNewLabel_2 = new JLabel("Statistice Type");
+		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
+		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel_2.gridx = 0;
+		gbc_lblNewLabel_2.gridy = 7;
+		contentPane.add(lblNewLabel_2, gbc_lblNewLabel_2);
 
 		final JComboBox cbStatisticType = new JComboBox();
 		GridBagConstraints gbc_cbStatisticType = new GridBagConstraints();
@@ -138,79 +145,85 @@ public class ZonalWindow extends JFrame {
 		gbc_cbStatisticType.insets = new Insets(0, 0, 5, 5);
 		gbc_cbStatisticType.fill = GridBagConstraints.HORIZONTAL;
 		gbc_cbStatisticType.gridx = 0;
-		gbc_cbStatisticType.gridy = 7;
+		gbc_cbStatisticType.gridy = 8;
 		contentPane.add(cbStatisticType, gbc_cbStatisticType);
 
 		JButton btnOk = new JButton("ok");
 		GridBagConstraints gbc_btnOk = new GridBagConstraints();
 		gbc_btnOk.insets = new Insets(0, 0, 0, 5);
 		gbc_btnOk.gridx = 2;
-		gbc_btnOk.gridy = 12;
+		gbc_btnOk.gridy = 13;
 		contentPane.add(btnOk, gbc_btnOk);
 
 		JButton btnCancle = new JButton("cancle");
 		GridBagConstraints gbc_btnCancle = new GridBagConstraints();
 		gbc_btnCancle.gridx = 3;
-		gbc_btnCancle.gridy = 12;
+		gbc_btnCancle.gridy = 13;
 		contentPane.add(btnCancle, gbc_btnCancle);
 
-
-		//-------------------------input zonal file
+		//-------------------------input file 
 		for(String k:hm.keySet()) {
-			cbInputZoneFile.addItem(k);
+			cbInputFile.addItem(k);
 		}
+		
+		inputFile=(String) cbInputFile.getItemAt(0); //default
 
-		inputZonalFile=(String) cbInputZoneFile.getItemAt(0); //default
-
-		cbInputZoneFile.addActionListener(new ActionListener() {
+		cbInputFile.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				inputZonalFile = (String) cbInputZoneFile.getSelectedItem();
-				//				System.out.println("选择的选项是: " + selectedItem);								
+				inputFile = (String) cbInputFile.getSelectedItem();
+				//System.out.println("选择的选项是: " + selectedItem);								
 			}			
 		});
 
-		//-------------------------input value file		
-		for(String k:hm.keySet()) {
-			cbInputValueFile.addItem(k);
-		}
-
-		inputValueFile=(String) cbInputValueFile.getItemAt(0); //default		
-		cbInputValueFile.addActionListener(new ActionListener() {
+		//-------------------------file list	
+		btnAdd.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				inputValueFile = (String) cbInputValueFile.getSelectedItem();
-				//				System.out.println("选择的选项是: " + selectedItem);								
-			}			
+				if(fileListModel.getSize()<2) {
+					String selectItem=(String) cbInputFile.getSelectedItem();
+					fileListModel.addElement(selectItem);
+				}
+			}
+
+		});
+
+		btnDelete.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				int index = listFileList.getSelectedIndex();
+				if(index>=0) {
+					fileListModel.remove(index);
+				}				
+			}
+
 		});
 
 		//-------------------------output file
-		//		tfOutputFile
-		//		btnOutputFile
 		btnOutputFile.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				JFileChooser fileChooser=new JFileChooser(".");				
-				int result = fileChooser.showSaveDialog(ZonalWindow.this);
+				int result = fileChooser.showSaveDialog(LocalWindow.this);
 				if (result == JFileChooser.APPROVE_OPTION) {					
 					outputFileName=fileChooser.getSelectedFile().getPath();
-					//					String fileName=fileChooser.getSelectedFile().getName();				
+					//							String fileName=fileChooser.getSelectedFile().getName();				
 					fileChooser.setVisible(true);
 					tfOutputFile.setText(outputFileName);
 				}				
 			}
-		});		
+		});
 
 		//-------------------------statistic type
-		//		cbStatisticType		 
-		cbStatisticType.addItem("MINIMUM");		
-		cbStatisticType.addItem("MAXIMUM");		
 		cbStatisticType.addItem("SUM");
-		cbStatisticType.addItem("MEAN");
 		cbStatisticType.addItem("VARITY");
-		
+		cbStatisticType.addItem("MAXIMUM");
+		cbStatisticType.addItem("MINIMUM");		
+		cbStatisticType.addItem("MEAN");
+
 		//the first item added is default
 		statisticType=(String) cbStatisticType.getItemAt(0); 
 
@@ -222,41 +235,37 @@ public class ZonalWindow extends JFrame {
 			}			
 		});
 
-
-		//		inputZonalFile;
-		//		inputValueFile;
-		//		outputFileName;
-		//	    statisticType;
-		//-------------------------click ok
-		//		btnOk
 		btnOk.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
 				
-				if(outputFileName==null) {
+				int count=fileListModel.getSize();
+				if(count==0 || outputFileName==null) {
 					JOptionPane.showMessageDialog(new JFrame(), "fail");
 					return;
-				}
-
-				int zonalLayerIndex=hm.get(inputZonalFile);
-				int valueLayerIndex=hm.get(inputValueFile);				
-
-				Layer zonalLayer=layers.get(zonalLayerIndex);
-				Layer valueLayer=layers.get(valueLayerIndex);
-
-				Layer newlayer;
+				}			
 
 				switch(statisticType) {
-				case "VARITY":						
+				case "VARITY":
 					break;
 				case "MAXIMUM":
 					break;
-				case "MINIMUM":						
-					newlayer=valueLayer.zonalMinimum(zonalLayer,"layer");
-					newlayer.save(outputFileName);
+				case "MINIMUM":			
 					break;
 				case "SUM":
+					if(count==1) {
+						String file1Name=(String)fileListModel.getElementAt(0);
+						Layer layer1=layers.get(hm.get(file1Name));
+						layer1.save(outputFileName);
+					}else if(count==2) {
+						String file1Name=(String)fileListModel.getElementAt(0);
+						Layer layer1=layers.get(hm.get(file1Name));
+						String file2Name=(String)fileListModel.getElementAt(1);
+						Layer layer2=layers.get(hm.get(file2Name));
+						Layer newLayer=layer1.localSum(layer2, "layer");
+						newLayer.save(outputFileName);
+					}
 					break;
 				case "MEAN":
 					break;
@@ -290,11 +299,10 @@ public class ZonalWindow extends JFrame {
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
 
-			}
-
+			}			
 		});
+
 		//-------------------------click cancle
-		//		btnCancle
 		btnCancle.addMouseListener(new MouseListener() {
 
 			@Override
@@ -328,6 +336,7 @@ public class ZonalWindow extends JFrame {
 			}
 
 		});
+
 
 	}
 

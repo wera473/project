@@ -116,6 +116,18 @@ public class TestGUI extends JFrame {
 		JMenuItem mntmZonal = new JMenuItem("Zonal");		
 		mnMapAlgebra.add(mntmZonal);
 		
+		mntmLocal.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				LocalWindow frame = new LocalWindow(hm,layers);
+				frame.setVisible(true);
+			}
+			
+		});
+		
+		
 		mntmFocal.addActionListener(new ActionListener() {
 
 			@Override
@@ -136,7 +148,7 @@ public class TestGUI extends JFrame {
 				frame.setVisible(true);
 			}
 			
-		});		
+		});	
 		
 
 		final JFileChooser fileChooser = new JFileChooser();
