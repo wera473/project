@@ -247,20 +247,49 @@ public class LocalWindow extends JFrame {
 					JOptionPane.showMessageDialog(new JFrame(), "fail");
 					return;
 				}			
-
+				
+				if(count==1) {
+					String file1Name=(String)fileListModel.getElementAt(0);
+					Layer layer1=layers.get(hm.get(file1Name));
+					layer1.save(outputFileName);
+					return;
+				}
+				
 				switch(statisticType) {
 				case "VARITY":
-					break;
-				case "MAXIMUM":
-					break;
-				case "MINIMUM":			
-					break;
-				case "SUM":
-					if(count==1) {
+					if(count == 2) {
 						String file1Name=(String)fileListModel.getElementAt(0);
 						Layer layer1=layers.get(hm.get(file1Name));
-						layer1.save(outputFileName);
-					}else if(count==2) {
+						String file2Name=(String)fileListModel.getElementAt(1);
+						Layer layer2=layers.get(hm.get(file2Name));
+						Layer[] inLayers = {layer1,layer2};
+						Layer newLayer = xxx.Algorithm.localVariety(inLayers,"layer");
+						newLayer.save(outputFileName);
+						System.out.println("localVariety:Success");
+					}
+					break;
+				case "MAXIMUM":
+					if(count == 2) {
+						String file1Name=(String)fileListModel.getElementAt(0);
+						Layer layer1=layers.get(hm.get(file1Name));
+						String file2Name=(String)fileListModel.getElementAt(1);
+						Layer layer2=layers.get(hm.get(file2Name));
+						Layer newLayer = layer1.localMaximum(layer2, "layer");
+						newLayer.save(outputFileName);
+					}
+					break;
+				case "MINIMUM":	
+					if(count == 2) {
+						String file1Name=(String)fileListModel.getElementAt(0);
+						Layer layer1=layers.get(hm.get(file1Name));
+						String file2Name=(String)fileListModel.getElementAt(1);
+						Layer layer2=layers.get(hm.get(file2Name));
+						Layer newLayer = layer1.localMinimum(layer2, "layer");
+						newLayer.save(outputFileName);
+					}
+					break;
+				case "SUM":
+					if(count==2) {
 						String file1Name=(String)fileListModel.getElementAt(0);
 						Layer layer1=layers.get(hm.get(file1Name));
 						String file2Name=(String)fileListModel.getElementAt(1);
@@ -270,12 +299,7 @@ public class LocalWindow extends JFrame {
 					}
 					break;
 				case "MEAN":
-					if(count==1) {
-						String file1Name=(String)fileListModel.getElementAt(0);
-						Layer layer1=layers.get(hm.get(file1Name));
-						layer1.save(outputFileName);
-					}
-					else if(count==2) {
+					if(count==2) {
 						String file1Name=(String)fileListModel.getElementAt(0);
 						Layer layer1=layers.get(hm.get(file1Name));
 						String file2Name=(String)fileListModel.getElementAt(1);
