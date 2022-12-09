@@ -489,6 +489,111 @@ public class Layer {
 		return outLayer;
 	}
 	
+	public Layer zonalVariety(Layer zoneLayer, String outLayerName) {
+		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+		HashMap<Double, ArrayList<Double>> hm = new HashMap<Double, ArrayList<Double>>(); // Create a HashMap
+		// key: zone
+		// value:all values in the current zone
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				// if (hm.get(zoneLayer.values[i][j])==null) {
+				if (!hm.containsKey(zoneLayer.values[i][j])) {
+					ArrayList<Double> newZoneValList = new ArrayList<Double>();
+					hm.put(zoneLayer.values[i][j], newZoneValList);
+				} 
+				ArrayList<Double> zoneValList = hm.get(zoneLayer.values[i][j]);
+				zoneValList.add(values[i][j]);
+				hm.put(zoneLayer.values[i][j],zoneValList);
+			}
+		}
+		HashMap<Double, Double> hm_variety = new HashMap<Double, Double>();
+		for (Double hm_key:hm.keySet()) {
+			Set<Double> uniqueValSet = new HashSet<Double>(hm.get(hm_key)); // unique values of current list
+			double size_uniqueValSet = uniqueValSet.size(); // get variety
+			hm_variety.put(hm_key,size_uniqueValSet);
+		}
+		
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				outLayer.values[i][j] = hm_variety.get(zoneLayer.values[i][j]);
+			}
+		}
+		// Collection<Integer> hm_values = hm.values();
+		//System.out.println(hm.values());
+		return outLayer;
+	}
+	
+	public Layer zonalSum(Layer zoneLayer, String outLayerName) {
+		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+		HashMap<Double, ArrayList<Double>> hm = new HashMap<Double, ArrayList<Double>>(); // Create a HashMap
+		// key: zone
+		// value:all values in the current zone
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				// if (hm.get(zoneLayer.values[i][j])==null) {
+				if (!hm.containsKey(zoneLayer.values[i][j])) {
+					ArrayList<Double> newZoneValList = new ArrayList<Double>();
+					hm.put(zoneLayer.values[i][j], newZoneValList);
+				} 
+				ArrayList<Double> zoneValList = hm.get(zoneLayer.values[i][j]);
+				zoneValList.add(values[i][j]);
+				hm.put(zoneLayer.values[i][j],zoneValList);
+			}
+		}
+		HashMap<Double, Double> hm_sum = new HashMap<Double, Double>();
+		for (Double hm_key:hm.keySet()) {
+			ArrayList<Double> zoneValList = hm.get(hm_key);
+			double zonSum = 0;
+			for (double zoneVal : zoneValList) {
+				zonSum += zoneVal;
+			}
+			hm_sum.put(hm_key, zonSum);
+		}
+		
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				outLayer.values[i][j] = hm_sum.get(zoneLayer.values[i][j]);
+			}
+		}
+		return outLayer;
+	}
+	
+	public Layer zonalMean(Layer zoneLayer, String outLayerName) {
+		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+		HashMap<Double, ArrayList<Double>> hm = new HashMap<Double, ArrayList<Double>>(); // Create a HashMap
+		// key: zone
+		// value:all values in the current zone
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				// if (hm.get(zoneLayer.values[i][j])==null) {
+				if (!hm.containsKey(zoneLayer.values[i][j])) {
+					ArrayList<Double> newZoneValList = new ArrayList<Double>();
+					hm.put(zoneLayer.values[i][j], newZoneValList);
+				} 
+				ArrayList<Double> zoneValList = hm.get(zoneLayer.values[i][j]);
+				zoneValList.add(values[i][j]);
+				hm.put(zoneLayer.values[i][j],zoneValList);
+			}
+		}
+		HashMap<Double, Double> hm_mean = new HashMap<Double, Double>();
+		for (Double hm_key:hm.keySet()) {
+			ArrayList<Double> zoneValList = hm.get(hm_key);
+			double zonSum = 0;
+			int size_zoneValList = zoneValList.size();
+			for (double zoneVal : zoneValList) {
+				zonSum += zoneVal;
+			}
+			hm_mean.put(hm_key, zonSum / size_zoneValList);
+		}
+		
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				outLayer.values[i][j] = hm_mean.get(zoneLayer.values[i][j]);
+			}
+		}
+		return outLayer;
+	}
+	
 	
 	
 }

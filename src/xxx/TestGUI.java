@@ -89,7 +89,7 @@ public class TestGUI extends JFrame {
 		mapPanel=new ArrayList();
 		mapPanelX=220;
 		mapPanelY=0;
-		scale=1;
+		scale = 1;
 		
 		mousePrevX=0;
 		mousePrevY=0;

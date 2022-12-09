@@ -248,17 +248,25 @@ public class ZonalWindow extends JFrame {
 				Layer newlayer;
 
 				switch(statisticType) {
-				case "VARITY":						
+				case "VARITY":
+					newlayer=valueLayer.zonalVariety(zonalLayer,"layer");
+					newlayer.save(outputFileName);
 					break;
 				case "MAXIMUM":
+					newlayer=valueLayer.zonalMaximum(zonalLayer,"layer");
+					newlayer.save(outputFileName);
 					break;
 				case "MINIMUM":						
 					newlayer=valueLayer.zonalMinimum(zonalLayer,"layer");
 					newlayer.save(outputFileName);
 					break;
 				case "SUM":
+					newlayer=valueLayer.zonalSum(zonalLayer,"layer");
+					newlayer.save(outputFileName);
 					break;
 				case "MEAN":
+					newlayer=valueLayer.zonalMean(zonalLayer,"layer");
+					newlayer.save(outputFileName);
 					break;
 				default:
 					break;
