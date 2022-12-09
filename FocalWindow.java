@@ -61,7 +61,7 @@ public class FocalWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public FocalWindow(final HashMap<String,Integer> hm,final ArrayList<Layer> layers) {		
-		setTitle("Focal");
+		setTitle("FocalStatistic");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 609, 412);
 		contentPane = new JPanel();

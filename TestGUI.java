@@ -109,11 +109,11 @@ public class TestGUI extends JFrame {
 		
 		JMenu mnMapAlgebra = new JMenu("MapAlgebra");
 		menuBar.add(mnMapAlgebra);
-		JMenuItem mntmLocal = new JMenuItem("Local");		
+		JMenuItem mntmLocal = new JMenuItem("LocalStatistic");		
 		mnMapAlgebra.add(mntmLocal);
-		JMenuItem mntmFocal = new JMenuItem("Focal");		
+		JMenuItem mntmFocal = new JMenuItem("FocalStatistic");		
 		mnMapAlgebra.add(mntmFocal);
-		JMenuItem mntmZonal = new JMenuItem("Zonal");		
+		JMenuItem mntmZonal = new JMenuItem("ZonalStatistic");		
 		mnMapAlgebra.add(mntmZonal);
 		
 		mntmLocal.addActionListener(new ActionListener() {

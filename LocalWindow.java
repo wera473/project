@@ -55,7 +55,7 @@ public class LocalWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public LocalWindow(final HashMap<String,Integer> hm,final ArrayList<Layer> layers) {
-		setTitle("local");
+		setTitle("LocalStatistic");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 663, 469);
 		contentPane = new JPanel();

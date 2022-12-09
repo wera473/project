@@ -55,7 +55,7 @@ public class ZonalWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public ZonalWindow(final HashMap<String,Integer> hm,final ArrayList<Layer> layers) {
-		setTitle("zonal");
+		setTitle("ZonalStatistic");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 588, 381);
 		contentPane = new JPanel();
