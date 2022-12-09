@@ -310,12 +310,20 @@ public class FocalWindow extends JFrame {
 						newlayer.save(outputFileName);
 						break;
 					case "MAXIMUM":
+						newlayer=layers.get(layerIndex).focalMaximum(radius, isSquare, "layer");
+						newlayer.save(outputFileName);
 						break;
 					case "MINIMUM":
+						newlayer=layers.get(layerIndex).focalMinimum(radius, isSquare, "layer");
+						newlayer.save(outputFileName);
 						break;
 					case "SUM":
+						newlayer=layers.get(layerIndex).focalSum(radius, isSquare, "layer");
+						newlayer.save(outputFileName);
 						break;
 					case "MEAN":
+						newlayer=layers.get(layerIndex).focalMean(radius, isSquare, "layer");
+						newlayer.save(outputFileName);
 						break;
 					default:
 						break;

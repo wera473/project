@@ -302,7 +302,6 @@ public class Layer {
 			for (int cell_i = i_left; cell_i <= i_right; cell_i++) { // cell_i is the row index of the Layer
 				for (int cell_j = j_left; cell_j <= j_right; cell_j++) { // cell_j is the col index of the Layer
 					if (IsSquare==true) {
-						System.out.println("aaaaaaaaaaaaaaaaaaaaa");
 						neighborObj = values[cell_i][cell_j];
 						neighborhood.add(neighborObj);
 					}
@@ -353,6 +352,70 @@ public class Layer {
 		
 	}
 	
+	public Layer focalMean(int r, boolean isSquare, String outLayerName) {
+		// r means radius
+		// IsSquare means whether the neighborhood is a square or circle
+		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+		ArrayList<Double> neighborhood;
+		
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				neighborhood = getNeighborhood(i, j, r, isSquare);
+				double neighborhoodSum = 0;
+				for (double neighborhoodValue : neighborhood) {
+					neighborhoodSum += neighborhoodValue;
+				}
+				int nbh_length = neighborhood.size();
+				outLayer.values[i][j] = neighborhoodSum/nbh_length;
+				//System.out.println("outLayer.values" + outLayer.values[i][j]);
+			}
+		}
+		return outLayer;
+	}
+	
+	public Layer focalMaximum(int r, boolean isSquare, String outLayerName) {
+		// r means radius
+		// IsSquare means whether the neighborhood is a square or circle
+		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+		ArrayList<Double> neighborhood;
+
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				neighborhood = getNeighborhood(i, j, r, isSquare);
+				double maxval = Double.NEGATIVE_INFINITY;
+				for (double nbh_val : neighborhood) {
+					if (nbh_val > maxval)
+						maxval = nbh_val;
+				}
+				outLayer.values[i][j] = maxval;
+				// System.out.println("outLayer.values" + outLayer.values[i][j]);
+			}
+		}
+		return outLayer;
+	}
+	
+	public Layer focalMinimum(int r, boolean isSquare, String outLayerName) {
+		// r means radius
+		// IsSquare means whether the neighborhood is a square or circle
+		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+		ArrayList<Double> neighborhood;
+
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				neighborhood = getNeighborhood(i, j, r, isSquare);
+				double minval = Double.POSITIVE_INFINITY;
+				for (double nbh_val : neighborhood) {
+					if (nbh_val < minval)
+						minval = nbh_val;
+				}
+				outLayer.values[i][j] = minval;
+				// System.out.println("outLayer.values" + outLayer.values[i][j]);
+			}
+		}
+		return outLayer;
+	}
+
+	
 	public Layer focalVariety(int r, boolean isSquare, String outLayerName) {
 		// r means radius
 		// IsSquare means whether it is a square or circle
@@ -395,9 +458,37 @@ public class Layer {
 			}
 		}
 		// Collection<Integer> hm_values = hm.values();
-		System.out.println(hm.values());
+		//System.out.println(hm.values());
 		return outLayer;
 	}
+	
+	public Layer zonalMaximum(Layer zoneLayer, String outLayerName) {
+		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+		HashMap<Double, Double> hm = new HashMap<Double, Double>(); // Create a HashMap
+		// key: zone value:maximum
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				// if (hm.get(zoneLayer.values[i][j])==null) {
+				if (!hm.containsKey(zoneLayer.values[i][j])) {
+					hm.put(zoneLayer.values[i][j], values[i][j]);
+				} else {
+					if (hm.get(zoneLayer.values[i][j]) < values[i][j]) {
+						hm.put(zoneLayer.values[i][j],values[i][j]);
+					}
+				}
+
+			}
+		}
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				outLayer.values[i][j] = hm.get(zoneLayer.values[i][j]);
+			}
+		}
+		// Collection<Integer> hm_values = hm.values();
+		//System.out.println(hm.values());
+		return outLayer;
+	}
+	
 	
 	
 }
