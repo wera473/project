@@ -262,14 +262,15 @@ public class FocalWindow extends JFrame {
 			
 		});
 		
-		//-------------------------statistic type		
+		//-------------------------statistic type
 		cbStatisticType.addItem("VARITY");
 		cbStatisticType.addItem("MAXIMUM");
 		cbStatisticType.addItem("MINIMUM");
 		cbStatisticType.addItem("SUM");
 		cbStatisticType.addItem("MEAN");
 		
-		statisticType="VARITY"; //default
+		//the first item added is default
+		statisticType=(String) cbStatisticType.getItemAt(0); 
 		
 		cbStatisticType.addActionListener(new ActionListener() {
 			@Override
@@ -292,6 +293,7 @@ public class FocalWindow extends JFrame {
 				// TODO Auto-generated method stub
 				
 				int layerIndex=hm.get(inputFile);
+				
 				Layer newlayer;
 				
 				switch(statisticType) {

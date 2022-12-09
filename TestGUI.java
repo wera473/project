@@ -127,6 +127,17 @@ public class TestGUI extends JFrame {
 			
 		});
 		
+		mntmZonal.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				ZonalWindow frame = new ZonalWindow(hm,layers);
+				frame.setVisible(true);
+			}
+			
+		});		
+		
 
 		final JFileChooser fileChooser = new JFileChooser();
 		fileChooser.addChoosableFileFilter(new FileFilter() {
