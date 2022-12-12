@@ -289,6 +289,8 @@ public class Layer {
 	//02 focal
 	
 	public ArrayList<Double> getNeighborhood(int i, int j, int r, boolean IsSquare) {
+		//TODO: if r = 0, just get the center cell
+		//TODO: if r < 0, report error and dismiss
 		//if (IsSquare) {
 			// IsSquare == true
 			int i_left = Math.max(i - r,0); // left boundary of the cell
