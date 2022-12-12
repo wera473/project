@@ -141,14 +141,14 @@ public class ZonalWindow extends JFrame {
 		gbc_cbStatisticType.gridy = 7;
 		contentPane.add(cbStatisticType, gbc_cbStatisticType);
 
-		JButton btnOk = new JButton("ok");
+		JButton btnOk = new JButton("Ok");
 		GridBagConstraints gbc_btnOk = new GridBagConstraints();
 		gbc_btnOk.insets = new Insets(0, 0, 0, 5);
 		gbc_btnOk.gridx = 2;
 		gbc_btnOk.gridy = 12;
 		contentPane.add(btnOk, gbc_btnOk);
 
-		JButton btnCancle = new JButton("cancle");
+		JButton btnCancle = new JButton("Cancel");
 		GridBagConstraints gbc_btnCancle = new GridBagConstraints();
 		gbc_btnCancle.gridx = 3;
 		gbc_btnCancle.gridy = 12;
@@ -209,7 +209,7 @@ public class ZonalWindow extends JFrame {
 		cbStatisticType.addItem("MAXIMUM");		
 		cbStatisticType.addItem("SUM");
 		cbStatisticType.addItem("MEAN");
-		cbStatisticType.addItem("VARITY");
+		cbStatisticType.addItem("VARIETY");
 		
 		//the first item added is default
 		statisticType=(String) cbStatisticType.getItemAt(0); 
@@ -248,17 +248,25 @@ public class ZonalWindow extends JFrame {
 				Layer newlayer;
 
 				switch(statisticType) {
-				case "VARITY":						
+				case "VARIETY":
+					newlayer=valueLayer.zonalVariety(zonalLayer,"layer");
+					newlayer.save(outputFileName);
 					break;
 				case "MAXIMUM":
+					newlayer=valueLayer.zonalMaximum(zonalLayer,"layer");
+					newlayer.save(outputFileName);
 					break;
 				case "MINIMUM":						
 					newlayer=valueLayer.zonalMinimum(zonalLayer,"layer");
 					newlayer.save(outputFileName);
 					break;
 				case "SUM":
+					newlayer=valueLayer.zonalSum(zonalLayer,"layer");
+					newlayer.save(outputFileName);
 					break;
 				case "MEAN":
+					newlayer=valueLayer.zonalMean(zonalLayer,"layer");
+					newlayer.save(outputFileName);
 					break;
 				default:
 					break;

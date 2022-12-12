@@ -161,7 +161,7 @@ public class FocalWindow extends JFrame {
 		gbc_cbStatisticType.gridy = 9;
 		contentPane.add(cbStatisticType, gbc_cbStatisticType);
 		
-		JButton btnCancle = new JButton("Cancle");
+		JButton btnCancle = new JButton("Cancel");
 		
 		JButton btnOk = new JButton("Ok");
 		GridBagConstraints gbc_btnOk = new GridBagConstraints();
@@ -266,7 +266,7 @@ public class FocalWindow extends JFrame {
 		});
 		
 		//-------------------------statistic type
-		cbStatisticType.addItem("VARITY");
+		cbStatisticType.addItem("VARIETY");
 		cbStatisticType.addItem("MAXIMUM");
 		cbStatisticType.addItem("MINIMUM");
 		cbStatisticType.addItem("SUM");
@@ -305,17 +305,25 @@ public class FocalWindow extends JFrame {
 				Layer newlayer;
 				
 				switch(statisticType) {
-					case "VARITY":
+					case "VARIETY":
 						newlayer=layers.get(layerIndex).focalVariety(radius, isSquare, "layer");
 						newlayer.save(outputFileName);
 						break;
 					case "MAXIMUM":
+						newlayer=layers.get(layerIndex).focalMaximum(radius, isSquare, "layer");
+						newlayer.save(outputFileName);
 						break;
 					case "MINIMUM":
+						newlayer=layers.get(layerIndex).focalMinimum(radius, isSquare, "layer");
+						newlayer.save(outputFileName);
 						break;
 					case "SUM":
+						newlayer=layers.get(layerIndex).focalSum(radius, isSquare, "layer");
+						newlayer.save(outputFileName);
 						break;
 					case "MEAN":
+						newlayer=layers.get(layerIndex).focalMean(radius, isSquare, "layer");
+						newlayer.save(outputFileName);
 						break;
 					default:
 						break;

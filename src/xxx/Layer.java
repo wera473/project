@@ -243,6 +243,7 @@ public class Layer {
 
 	// algorithms
 	// 01 local
+	
 	public Layer localSum(Layer inLayer, String outLayerName) {
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 		for (int i = 0; i < nRows; i++) {
@@ -252,6 +253,7 @@ public class Layer {
 		}
 		return outLayer;
 	}
+	
 	public Layer localMaximum(Layer inLayer, String outLayerName) {
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 		for (int i = 0; i < nRows; i++) {
@@ -262,6 +264,7 @@ public class Layer {
 		}
 		return outLayer;
 	}
+	
 	public Layer localMinimum(Layer inLayer, String outLayerName) {
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 		for (int i = 0; i < nRows; i++) {
@@ -302,7 +305,6 @@ public class Layer {
 			for (int cell_i = i_left; cell_i <= i_right; cell_i++) { // cell_i is the row index of the Layer
 				for (int cell_j = j_left; cell_j <= j_right; cell_j++) { // cell_j is the col index of the Layer
 					if (IsSquare==true) {
-						System.out.println("aaaaaaaaaaaaaaaaaaaaa");
 						neighborObj = values[cell_i][cell_j];
 						neighborhood.add(neighborObj);
 					}
@@ -329,7 +331,6 @@ public class Layer {
 
 	}
 
-	
 	public Layer focalSum(int r, boolean isSquare, String outLayerName) {
 		// r means radius
 		// IsSquare means whether the neighborhood is a square or circle
@@ -353,6 +354,69 @@ public class Layer {
 		
 	}
 	
+	public Layer focalMean(int r, boolean isSquare, String outLayerName) {
+		// r means radius
+		// IsSquare means whether the neighborhood is a square or circle
+		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+		ArrayList<Double> neighborhood;
+		
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				neighborhood = getNeighborhood(i, j, r, isSquare);
+				double neighborhoodSum = 0;
+				for (double neighborhoodValue : neighborhood) {
+					neighborhoodSum += neighborhoodValue;
+				}
+				int nbh_length = neighborhood.size();
+				outLayer.values[i][j] = neighborhoodSum/nbh_length;
+				//System.out.println("outLayer.values" + outLayer.values[i][j]);
+			}
+		}
+		return outLayer;
+	}
+	
+	public Layer focalMaximum(int r, boolean isSquare, String outLayerName) {
+		// r means radius
+		// IsSquare means whether the neighborhood is a square or circle
+		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+		ArrayList<Double> neighborhood;
+
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				neighborhood = getNeighborhood(i, j, r, isSquare);
+				double maxval = Double.NEGATIVE_INFINITY;
+				for (double nbh_val : neighborhood) {
+					if (nbh_val > maxval)
+						maxval = nbh_val;
+				}
+				outLayer.values[i][j] = maxval;
+				// System.out.println("outLayer.values" + outLayer.values[i][j]);
+			}
+		}
+		return outLayer;
+	}
+	
+	public Layer focalMinimum(int r, boolean isSquare, String outLayerName) {
+		// r means radius
+		// IsSquare means whether the neighborhood is a square or circle
+		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+		ArrayList<Double> neighborhood;
+
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				neighborhood = getNeighborhood(i, j, r, isSquare);
+				double minval = Double.POSITIVE_INFINITY;
+				for (double nbh_val : neighborhood) {
+					if (nbh_val < minval)
+						minval = nbh_val;
+				}
+				outLayer.values[i][j] = minval;
+				// System.out.println("outLayer.values" + outLayer.values[i][j]);
+			}
+		}
+		return outLayer;
+	}
+	
 	public Layer focalVariety(int r, boolean isSquare, String outLayerName) {
 		// r means radius
 		// IsSquare means whether it is a square or circle
@@ -371,6 +435,8 @@ public class Layer {
 		}
 		return outLayer;
 	}
+	
+	// 03 zonal
 
 	public Layer zonalMinimum(Layer zoneLayer, String outLayerName) {
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
@@ -395,9 +461,140 @@ public class Layer {
 			}
 		}
 		// Collection<Integer> hm_values = hm.values();
-		System.out.println(hm.values());
+		//System.out.println(hm.values());
 		return outLayer;
 	}
 	
+	public Layer zonalMaximum(Layer zoneLayer, String outLayerName) {
+		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+		HashMap<Double, Double> hm = new HashMap<Double, Double>(); // Create a HashMap
+		// key: zone value:maximum
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				// if (hm.get(zoneLayer.values[i][j])==null) {
+				if (!hm.containsKey(zoneLayer.values[i][j])) {
+					hm.put(zoneLayer.values[i][j], values[i][j]);
+				} else {
+					if (hm.get(zoneLayer.values[i][j]) < values[i][j]) {
+						hm.put(zoneLayer.values[i][j],values[i][j]);
+					}
+				}
+
+			}
+		}
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				outLayer.values[i][j] = hm.get(zoneLayer.values[i][j]);
+			}
+		}
+		// Collection<Integer> hm_values = hm.values();
+		//System.out.println(hm.values());
+		return outLayer;
+	}
+	
+	public Layer zonalVariety(Layer zoneLayer, String outLayerName) {
+		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+		HashMap<Double, ArrayList<Double>> hm = new HashMap<Double, ArrayList<Double>>(); // Create a HashMap
+		// key: zone
+		// value:all values in the current zone
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				// if (hm.get(zoneLayer.values[i][j])==null) {
+				if (!hm.containsKey(zoneLayer.values[i][j])) {
+					ArrayList<Double> newZoneValList = new ArrayList<Double>();
+					hm.put(zoneLayer.values[i][j], newZoneValList);
+				} 
+				ArrayList<Double> zoneValList = hm.get(zoneLayer.values[i][j]);
+				zoneValList.add(values[i][j]);
+				hm.put(zoneLayer.values[i][j],zoneValList);
+			}
+		}
+		HashMap<Double, Double> hm_variety = new HashMap<Double, Double>();
+		for (Double hm_key:hm.keySet()) {
+			Set<Double> uniqueValSet = new HashSet<Double>(hm.get(hm_key)); // unique values of current list
+			double size_uniqueValSet = uniqueValSet.size(); // get variety
+			hm_variety.put(hm_key,size_uniqueValSet);
+		}
+		
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				outLayer.values[i][j] = hm_variety.get(zoneLayer.values[i][j]);
+			}
+		}
+		// Collection<Integer> hm_values = hm.values();
+		//System.out.println(hm.values());
+		return outLayer;
+	}
+	
+	public Layer zonalSum(Layer zoneLayer, String outLayerName) {
+		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+		HashMap<Double, ArrayList<Double>> hm = new HashMap<Double, ArrayList<Double>>(); // Create a HashMap
+		// key: zone
+		// value:all values in the current zone
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				// if (hm.get(zoneLayer.values[i][j])==null) {
+				if (!hm.containsKey(zoneLayer.values[i][j])) {
+					ArrayList<Double> newZoneValList = new ArrayList<Double>();
+					hm.put(zoneLayer.values[i][j], newZoneValList);
+				} 
+				ArrayList<Double> zoneValList = hm.get(zoneLayer.values[i][j]);
+				zoneValList.add(values[i][j]);
+				hm.put(zoneLayer.values[i][j],zoneValList);
+			}
+		}
+		HashMap<Double, Double> hm_sum = new HashMap<Double, Double>();
+		for (Double hm_key:hm.keySet()) {
+			ArrayList<Double> zoneValList = hm.get(hm_key);
+			double zonSum = 0;
+			for (double zoneVal : zoneValList) {
+				zonSum += zoneVal;
+			}
+			hm_sum.put(hm_key, zonSum);
+		}
+		
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				outLayer.values[i][j] = hm_sum.get(zoneLayer.values[i][j]);
+			}
+		}
+		return outLayer;
+	}
+	
+	public Layer zonalMean(Layer zoneLayer, String outLayerName) {
+		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+		HashMap<Double, ArrayList<Double>> hm = new HashMap<Double, ArrayList<Double>>(); // Create a HashMap
+		// key: zone
+		// value:all values in the current zone
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				// if (hm.get(zoneLayer.values[i][j])==null) {
+				if (!hm.containsKey(zoneLayer.values[i][j])) {
+					ArrayList<Double> newZoneValList = new ArrayList<Double>();
+					hm.put(zoneLayer.values[i][j], newZoneValList);
+				} 
+				ArrayList<Double> zoneValList = hm.get(zoneLayer.values[i][j]);
+				zoneValList.add(values[i][j]);
+				hm.put(zoneLayer.values[i][j],zoneValList);
+			}
+		}
+		HashMap<Double, Double> hm_mean = new HashMap<Double, Double>();
+		for (Double hm_key:hm.keySet()) {
+			ArrayList<Double> zoneValList = hm.get(hm_key);
+			double zonSum = 0;
+			int size_zoneValList = zoneValList.size();
+			for (double zoneVal : zoneValList) {
+				zonSum += zoneVal;
+			}
+			hm_mean.put(hm_key, zonSum / size_zoneValList);
+		}
+		
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				outLayer.values[i][j] = hm_mean.get(zoneLayer.values[i][j]);
+			}
+		}
+		return outLayer;
+	}
 	
 }
