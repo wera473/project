@@ -240,7 +240,7 @@ public class testGUI extends JFrame {
 		});
 		
 		fileChooser.setCurrentDirectory(new
-				File("."));
+				File("user.home"));
 		fileChooser.setMultiSelectionEnabled(true);
 		
 		//---------------open file	
