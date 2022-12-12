@@ -55,6 +55,7 @@ public class LocalWindow extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param actionListener 
 	 * @param acActionListenertionListener 
 	 */
 	public LocalWindow(final HashMap<String,Integer> hm,final ArrayList<Layer> layers) {
@@ -320,7 +321,7 @@ public class LocalWindow extends JFrame {
 				default:
 					break;
 				}			
-
+				
 				dispose();
 
 			}

@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
@@ -369,15 +370,94 @@ public class testGUI extends JFrame {
 			public void valueChanged(TreeSelectionEvent e) {
 				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) fileTree.getLastSelectedPathComponent();
 				//		        System.out.println("Selected node: " + selectedNode.getUserObject());		        
-//								System.out.println(hm.get(selectedNode.getUserObject()));
+				//								System.out.println(hm.get(selectedNode.getUserObject()));
 
 				int selectNodeIndex=hm.get(selectedNode.getUserObject());
-				mapPanel.get(currentLayer).setVisible(false);
+				if(currentLayer>-1) {
+					mapPanel.get(currentLayer).setVisible(false);
+				}				
 				currentLayer=selectNodeIndex;
 				mapPanel.get(currentLayer).setVisible(true);
 			}
 		});
-	
+
+		JPopupMenu popMenu=new JPopupMenu();
+		JMenuItem mntmDelete=new JMenuItem("Delete");
+
+		popMenu.add(mntmDelete);
+
+		fileTree.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				TreePath treePath=fileTree.getPathForLocation(e.getX(), e.getY());
+				if(treePath==null) {
+					return;
+				}
+				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) treePath.getLastPathComponent();
+				int selectNodeIndex=-9999;
+				selectNodeIndex=hm.get(selectedNode.getUserObject());
+
+				if(selectNodeIndex>-9999) {
+					fileTree.setSelectionPath(treePath);
+					if(e.getButton()==3) {
+						popMenu.show(fileTree,e.getX(),e.getY());
+					}
+				}
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+		});
+
+		mntmDelete.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+//				System.out.println("delete");
+				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) fileTree.getLastSelectedPathComponent();				
+				int selectNodeIndex=hm.get(selectedNode.getUserObject());			
+				if(selectNodeIndex==currentLayer) {
+					System.out.println("current");
+					mapPanel.get(currentLayer).setVisible(false);
+					currentLayer=-1;					
+//					contentPane.repaint();
+				}
+				layers.remove(selectNodeIndex);
+				layerCount--;
+				mapPanel.remove(selectNodeIndex);
+				hm.remove(selectedNode.getUserObject());
+				hmIndexRefresh(hm);				
+				System.out.println(layers.size()+" "+hm.size());
+				
+				fileTreeModel.removeNodeFromParent((MutableTreeNode) selectedNode.getParent());
+			}
+
+		});
+
 		//---------------zoom in and zoom out 
 		contentPane.addMouseWheelListener(new MouseWheelListener() {
 			// Override the mouseWheelMoved method to handle mouse wheel move events
@@ -463,8 +543,6 @@ public class testGUI extends JFrame {
 				lblNewLabel.setText("X = "+e.getX()+" ; Y = "+e.getY());
 
 				// System.out.println(mousePrevX+" "+mousePrevY); 
-
-
 			}
 
 		});
@@ -480,8 +558,8 @@ public class testGUI extends JFrame {
 
 		fileTree.expandRow(0);
 		fileTree.expandRow(1);	
-
-//		System.out.println(fileTree.getRowCount());
+		
+		//		System.out.println(fileTree.getRowCount());
 
 		System.out.println("Selected file: " + 
 				filePath);
@@ -508,6 +586,14 @@ public class testGUI extends JFrame {
 		//		System.out.println(layerName+" "+currentLayer);
 		System.out.println("hoi");		
 
+	}
+	
+	public void hmIndexRefresh(HashMap<String,Integer> hm) {
+		int index=0;
+		for(String s:hm.keySet()) {
+			hm.put(s,index);
+			index++;		
+		}
 	}
 
 	private class SwingAction extends AbstractAction {
