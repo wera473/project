@@ -1,4 +1,4 @@
-package GUIDemo;
+package xxx;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
