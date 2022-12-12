@@ -1,5 +1,4 @@
 package xxx;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -27,6 +26,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JFileChooser;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -37,6 +38,9 @@ import java.awt.image.BufferedImage;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+
+
+
 import java.util.Scanner;
 
 import javax.swing.JTextField;
@@ -46,11 +50,14 @@ import javax.swing.JLabel;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 public class testGUI extends JFrame {
+
 	private JPanel contentPane;
 	
 	public DefaultMutableTreeNode rootNode;
 	public DefaultTreeModel fileTreeModel;
 	public JTree fileTree;
+	
+	JScrollPane fileWindow;
 	
 	public ArrayList<Layer> layers;
 	public ArrayList<MapPanel> mapPanel;
@@ -66,6 +73,8 @@ public class testGUI extends JFrame {
 	
 	public HashMap<String,Integer> hm; //layername,index
 	
+	final JLabel lblNewLabel;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -73,8 +82,41 @@ public class testGUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					testGUI frame = new testGUI();
-					frame.setVisible(true);					
+					final testGUI frame = new testGUI();
+					frame.setVisible(true);	
+					
+					frame.addComponentListener(new ComponentListener() {
+
+						@Override
+						public void componentResized(ComponentEvent e) {
+							// TODO Auto-generated method stub
+							System.out.println(e.getComponent().getHeight());
+							frame.fileWindow.setBounds(0,0,200,e.getComponent().getHeight()-100);
+							frame.lblNewLabel.setBounds(10, e.getComponent().getHeight()-100, 100, 32);
+							
+						}
+
+						@Override
+						public void componentMoved(ComponentEvent e) {
+							// TODO Auto-generated method stub
+							
+						}
+
+						@Override
+						public void componentShown(ComponentEvent e) {
+							// TODO Auto-generated method stub
+							
+						}
+
+						@Override
+						public void componentHidden(ComponentEvent e) {
+							// TODO Auto-generated method stub
+							
+						}
+						
+					});
+					
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -98,15 +140,15 @@ public class testGUI extends JFrame {
 		
 		fileTree.setScrollsOnExpand(true);
 		
-		JScrollPane fileWindow=new JScrollPane(fileTree);	
-		fileWindow.setBounds(0,0,200,750);
+		fileWindow=new JScrollPane(fileTree);	
+		fileWindow.setBounds(0,0,200,this.getHeight()-100);
 		
 		layers = new ArrayList();
 		
 		mapPanel=new ArrayList();
 		mapPanelX=220;
 		mapPanelY=0;
-		scale=1;
+		scale = 1;
 		
 		mousePrevX=0;
 		mousePrevY=0;
@@ -155,9 +197,15 @@ public class testGUI extends JFrame {
 
 		JMenu mnZoomOut = new JMenu("Zoom out -");
 		mnZoomOut.addMouseListener(new MouseAdapter() {
+			
+			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-					 //Zoom out
+					
+				if(scale==1) {
+					return;
+				}
+							//Zoom out
 					scale-=1;
 				
 				for(MapPanel mp:mapPanel) {
@@ -348,9 +396,9 @@ public class testGUI extends JFrame {
 			  }
 		});
 		
-		 final JLabel lblNewLabel = new JLabel("");
+		lblNewLabel = new JLabel("");
 		 lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
- 		lblNewLabel.setBounds(10, 750, 200, 32);
+ 		lblNewLabel.setBounds(10, this.getHeight()-100, 200, 32);
  		contentPane.add(lblNewLabel); 
  		lblNewLabel.setPreferredSize(new Dimension(contentPane.getWidth(), 16));
  		
@@ -444,7 +492,8 @@ public class testGUI extends JFrame {
 		
 		hm.put(layerName, currentLayer);
 //		System.out.println(layerName+" "+currentLayer);
-		System.out.println("hoi");
+		System.out.println("hoi");		
+		
 	}
 	
 	private class SwingAction extends AbstractAction {

@@ -1,8 +1,8 @@
 package xxx;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.LayoutManager;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -22,9 +23,12 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JFileChooser;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
@@ -32,7 +36,19 @@ import java.awt.image.BufferedImage;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+<<<<<<<< HEAD:src_archive/TestGUI_old.java
 public class TestGUI_old extends JFrame {
+========
+import java.util.Scanner;
+
+import javax.swing.JTextField;
+import java.awt.Toolkit;
+import javax.swing.JToolBar;
+import javax.swing.JLabel;
+import java.awt.Color;
+import javax.swing.ImageIcon;
+public class testGUI extends JFrame {
+>>>>>>>> Robin:src/xxx/testGUI.java
 	private JPanel contentPane;
 	
 	public DefaultMutableTreeNode rootNode;
@@ -60,7 +76,7 @@ public class TestGUI_old extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TestGUI frame = new TestGUI();
+					testGUI frame = new testGUI();
 					frame.setVisible(true);					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -71,20 +87,24 @@ public class TestGUI_old extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public TestGUI() {
+	public testGUI() {
+		setBackground(new Color(255, 255, 255));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Wera\\Documents\\lab5\\3357797.png"));
+		setTitle("GIteSt");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 800);
 		
 		rootNode=new DefaultMutableTreeNode(null);
 		fileTreeModel=new DefaultTreeModel(rootNode);
 		fileTree = new JTree(fileTreeModel);		
+		fileTree.setBackground(new Color(255, 255, 255));
 		
 		fileTree.setScrollsOnExpand(true);
 		
 		JScrollPane fileWindow=new JScrollPane(fileTree);	
-		fileWindow.setBounds(0,0,200,600);
+		fileWindow.setBounds(0,0,200,750);
 		
-		layers=new ArrayList();
+		layers = new ArrayList();
 		
 		mapPanel=new ArrayList();
 		mapPanelX=220;
@@ -96,7 +116,7 @@ public class TestGUI_old extends JFrame {
 		
 		layerCount=0;
 		currentLayer=-1; 
-		
+
 		hm=new HashMap(); 
 		
 		//----------------menubar
@@ -116,6 +136,63 @@ public class TestGUI_old extends JFrame {
 		mnMapAlgebra.add(mntmFocal);
 		JMenuItem mntmZonal = new JMenuItem("ZonalStatistic");		
 		mnMapAlgebra.add(mntmZonal);
+		
+		JMenu mnZoomIn = new JMenu("Zoom in +");
+		mnZoomIn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				 //Zoom in
+				scale+=1;
+			
+			for(MapPanel mp:mapPanel) {
+		    	contentPane.remove(mp);
+		    	contentPane.repaint();
+		    	mp.setSize(scale);
+		    	contentPane.add(mp,BorderLayout.EAST);
+		    	mp.setBounds(mapPanelX, mapPanelY, mp.width, mp.height);
+		    };		    	
+	    		
+			}});
+		mnZoomIn.setIcon(null);
+		menuBar.add(mnZoomIn);
+
+		JMenu mnZoomOut = new JMenu("Zoom out -");
+		mnZoomOut.addMouseListener(new MouseAdapter() {
+			
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+					
+				if(scale==1) {
+					return;
+				}
+							//Zoom out
+					scale-=1;
+				
+				for(MapPanel mp:mapPanel) {
+			    	contentPane.remove(mp);
+			    	contentPane.repaint();
+			    	mp.setSize(scale);
+			    	contentPane.add(mp,BorderLayout.EAST);
+			    	mp.setBounds(mapPanelX, mapPanelY, mp.width, mp.height);
+			    };
+			}
+		});
+		menuBar.add(mnZoomOut);
+		
+		JMenu mnRefresh = new JMenu("Refresh");
+		menuBar.add(mnRefresh);
+		
+		mnRefresh.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				contentPane.revalidate();
+				contentPane.repaint();
+				//refresh page Button
+				
+			}
+		});
 		
 		mntmLocal.addActionListener(new ActionListener() {
 
@@ -174,7 +251,9 @@ public class TestGUI_old extends JFrame {
 		JMenuItem mntmOpen = new JMenuItem("Open");
 		mntmOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int result = fileChooser.showOpenDialog(TestGUI.this);
+				
+					
+				int result = fileChooser.showOpenDialog(testGUI.this);
 				if (result == JFileChooser.APPROVE_OPTION) {
 					File[] selectedFiles = 
 							fileChooser.getSelectedFiles();
@@ -194,7 +273,7 @@ public class TestGUI_old extends JFrame {
 		mntmSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
 				JFileChooser fileChooser=new JFileChooser(".");				
-				int result = fileChooser.showSaveDialog(TestGUI.this);	
+				int result = fileChooser.showSaveDialog(testGUI.this);	
 				if (result == JFileChooser.APPROVE_OPTION) {					
 					String fileName=fileChooser.getSelectedFile().getPath();
 //					String fileName=fileChooser.getSelectedFile().getName();
@@ -209,13 +288,26 @@ public class TestGUI_old extends JFrame {
 		mnActions.add(mntmOpen);
 		mnActions.add(mntmSave);
 		JMenuItem mntmExit = new JMenuItem("Exit");
+		mntmExit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+			 
+			}
+		});
 		mnFile.add(mntmExit);
+	
+		
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.add(fileWindow,BorderLayout.WEST);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+	
+		
+
 		//---------------
 		fileTree.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent e) {
@@ -265,7 +357,15 @@ public class TestGUI_old extends JFrame {
 			  }
 		});
 		
-		
+		 final JLabel lblNewLabel = new JLabel("");
+		 lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
+ 		lblNewLabel.setBounds(10, 750, 200, 32);
+ 		contentPane.add(lblNewLabel); 
+ 		lblNewLabel.setPreferredSize(new Dimension(contentPane.getWidth(), 16));
+ 		
+ 		
+ 		//lblNewLabel.setLayout((LayoutManager) new BoxLayout(lblNewLabel, BoxLayout.Y_AXIS));
+
 		//---------------drag the map
 		contentPane.addMouseMotionListener(new MouseMotionListener() {
 			@Override
@@ -290,7 +390,8 @@ public class TestGUI_old extends JFrame {
     			    	mp.setBounds(mapPanelX, mapPanelY, mp.width, mp.height);
     			    };	
                 }                
-            }
+            
+		}
 
             @Override
             public void mouseMoved(MouseEvent e) {
@@ -302,10 +403,19 @@ public class TestGUI_old extends JFrame {
                 mousePrevX=x;
                 mousePrevY=y;
                 
-//                System.out.println(mousePrevX+" "+mousePrevY);            	
+                String displayText = (mousePrevX+" "+mousePrevY);
+                
+                lblNewLabel.setText("X = "+e.getX()+" ; Y = "+e.getY());
+                
+               // System.out.println(mousePrevX+" "+mousePrevY); 
+                
+               
             }
+		
 		});
 	}
+	
+ 		
 	
 	public void newFile(String filePath, String layerName) {		
 		//-------------------------add file content to fileWindow		
@@ -324,8 +434,7 @@ public class TestGUI_old extends JFrame {
 				filePath);
 		
 		//-----------------------------display map	
-		Layer newLayer=new Layer("layer", 
-				filePath);
+		Layer newLayer=new Layer("layer", filePath);
 		layers.add(newLayer);
 		BufferedImage layerImage = newLayer.toImage();						
 		
@@ -344,6 +453,7 @@ public class TestGUI_old extends JFrame {
 		
 		hm.put(layerName, currentLayer);
 //		System.out.println(layerName+" "+currentLayer);
+		System.out.println("hoi");
 	}
 	
 	private class SwingAction extends AbstractAction {
@@ -355,3 +465,4 @@ public class TestGUI_old extends JFrame {
 		}
 	}
 }
+ 
