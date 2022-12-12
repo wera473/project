@@ -243,6 +243,7 @@ public class Layer {
 
 	// algorithms
 	// 01 local
+	
 	public Layer localSum(Layer inLayer, String outLayerName) {
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 		for (int i = 0; i < nRows; i++) {
@@ -252,6 +253,7 @@ public class Layer {
 		}
 		return outLayer;
 	}
+	
 	public Layer localMaximum(Layer inLayer, String outLayerName) {
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 		for (int i = 0; i < nRows; i++) {
@@ -262,6 +264,7 @@ public class Layer {
 		}
 		return outLayer;
 	}
+	
 	public Layer localMinimum(Layer inLayer, String outLayerName) {
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 		for (int i = 0; i < nRows; i++) {
@@ -328,7 +331,6 @@ public class Layer {
 
 	}
 
-	
 	public Layer focalSum(int r, boolean isSquare, String outLayerName) {
 		// r means radius
 		// IsSquare means whether the neighborhood is a square or circle
@@ -414,7 +416,6 @@ public class Layer {
 		}
 		return outLayer;
 	}
-
 	
 	public Layer focalVariety(int r, boolean isSquare, String outLayerName) {
 		// r means radius
@@ -434,6 +435,8 @@ public class Layer {
 		}
 		return outLayer;
 	}
+	
+	// 03 zonal
 
 	public Layer zonalMinimum(Layer zoneLayer, String outLayerName) {
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
@@ -593,7 +596,5 @@ public class Layer {
 		}
 		return outLayer;
 	}
-	
-	
 	
 }
