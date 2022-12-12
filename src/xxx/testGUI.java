@@ -36,9 +36,9 @@ import java.awt.image.BufferedImage;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-<<<<<<<< HEAD:src_archive/TestGUI_old.java
-public class TestGUI_old extends JFrame {
-========
+
+
+
 import java.util.Scanner;
 
 import javax.swing.JTextField;
@@ -48,7 +48,7 @@ import javax.swing.JLabel;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 public class testGUI extends JFrame {
->>>>>>>> Robin:src/xxx/testGUI.java
+
 	private JPanel contentPane;
 	
 	public DefaultMutableTreeNode rootNode;
