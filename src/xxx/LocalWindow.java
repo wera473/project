@@ -148,14 +148,14 @@ public class LocalWindow extends JFrame {
 		gbc_cbStatisticType.gridy = 8;
 		contentPane.add(cbStatisticType, gbc_cbStatisticType);
 
-		JButton btnOk = new JButton("ok");
+		JButton btnOk = new JButton("Ok");
 		GridBagConstraints gbc_btnOk = new GridBagConstraints();
 		gbc_btnOk.insets = new Insets(0, 0, 0, 5);
 		gbc_btnOk.gridx = 2;
 		gbc_btnOk.gridy = 13;
 		contentPane.add(btnOk, gbc_btnOk);
 
-		JButton btnCancle = new JButton("cancle");
+		JButton btnCancle = new JButton("Cancel");
 		GridBagConstraints gbc_btnCancle = new GridBagConstraints();
 		gbc_btnCancle.gridx = 3;
 		gbc_btnCancle.gridy = 13;
@@ -219,7 +219,7 @@ public class LocalWindow extends JFrame {
 
 		//-------------------------statistic type
 		cbStatisticType.addItem("SUM");
-		cbStatisticType.addItem("VARITY");
+		cbStatisticType.addItem("VARIETY");
 		cbStatisticType.addItem("MAXIMUM");
 		cbStatisticType.addItem("MINIMUM");		
 		cbStatisticType.addItem("MEAN");
@@ -256,7 +256,7 @@ public class LocalWindow extends JFrame {
 				}
 				
 				switch(statisticType) {
-				case "VARITY":
+				case "VARIETY":
 					if(count == 2) {
 						String file1Name=(String)fileListModel.getElementAt(0);
 						Layer layer1=layers.get(hm.get(file1Name));
