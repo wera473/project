@@ -154,9 +154,15 @@ public class testGUI extends JFrame {
 
 		JMenu mnZoomOut = new JMenu("Zoom out -");
 		mnZoomOut.addMouseListener(new MouseAdapter() {
+			
+			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-					 //Zoom out
+					
+				if(scale==1) {
+					return;
+				}
+							//Zoom out
 					scale-=1;
 				
 				for(MapPanel mp:mapPanel) {
