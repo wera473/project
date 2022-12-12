@@ -1,4 +1,4 @@
-package se.kth.ag2411.mapalgebra;
+package xxx;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -398,7 +398,7 @@ public class testGUI extends JFrame {
 		
 		lblNewLabel = new JLabel("");
 		 lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
- 		lblNewLabel.setBounds(10, this.getHeight()-100, 100, 32);
+ 		lblNewLabel.setBounds(10, this.getHeight()-100, 200, 32);
  		contentPane.add(lblNewLabel); 
  		lblNewLabel.setPreferredSize(new Dimension(contentPane.getWidth(), 16));
  		
