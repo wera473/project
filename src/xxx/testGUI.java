@@ -1,5 +1,4 @@
 package xxx;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -37,6 +36,9 @@ import java.awt.image.BufferedImage;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+<<<<<<<< HEAD:src_archive/TestGUI_old.java
+public class TestGUI_old extends JFrame {
+========
 import java.util.Scanner;
 
 import javax.swing.JTextField;
@@ -46,6 +48,7 @@ import javax.swing.JLabel;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 public class testGUI extends JFrame {
+>>>>>>>> Robin:src/xxx/testGUI.java
 	private JPanel contentPane;
 	
 	public DefaultMutableTreeNode rootNode;
@@ -106,7 +109,7 @@ public class testGUI extends JFrame {
 		mapPanel=new ArrayList();
 		mapPanelX=220;
 		mapPanelY=0;
-		scale=1;
+		scale = 1;
 		
 		mousePrevX=0;
 		mousePrevY=0;
@@ -155,9 +158,15 @@ public class testGUI extends JFrame {
 
 		JMenu mnZoomOut = new JMenu("Zoom out -");
 		mnZoomOut.addMouseListener(new MouseAdapter() {
+			
+			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-					 //Zoom out
+					
+				if(scale==1) {
+					return;
+				}
+							//Zoom out
 					scale-=1;
 				
 				for(MapPanel mp:mapPanel) {
