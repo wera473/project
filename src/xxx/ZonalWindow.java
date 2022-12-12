@@ -56,7 +56,7 @@ public class ZonalWindow extends JFrame {
 	 */
 	public ZonalWindow(final HashMap<String,Integer> hm,final ArrayList<Layer> layers) {
 		setTitle("ZonalStatistic");
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 588, 381);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -196,9 +196,15 @@ public class ZonalWindow extends JFrame {
 				int result = fileChooser.showSaveDialog(ZonalWindow.this);
 				if (result == JFileChooser.APPROVE_OPTION) {					
 					outputFileName=fileChooser.getSelectedFile().getPath();
-					//					String fileName=fileChooser.getSelectedFile().getName();				
+					
+					String fileName=fileChooser.getSelectedFile().getName();					
+					if(fileName.indexOf(".txt")==-1) {
+						outputFileName=outputFileName+".txt";
+					}
+					
 					fileChooser.setVisible(true);
 					tfOutputFile.setText(outputFileName);
+					
 				}				
 			}
 		});		

@@ -62,7 +62,7 @@ public class FocalWindow extends JFrame {
 	 */
 	public FocalWindow(final HashMap<String,Integer> hm,final ArrayList<Layer> layers) {		
 		setTitle("FocalStatistic");
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 609, 412);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -198,7 +198,12 @@ public class FocalWindow extends JFrame {
 				int result = fileChooser.showSaveDialog(FocalWindow.this);
 				if (result == JFileChooser.APPROVE_OPTION) {					
 					outputFileName=fileChooser.getSelectedFile().getPath();
-//					String fileName=fileChooser.getSelectedFile().getName();				
+
+					String fileName=fileChooser.getSelectedFile().getName();					
+					if(fileName.indexOf(".txt")==-1) {
+						outputFileName=outputFileName+".txt";
+					}
+					
 					fileChooser.setVisible(true);
 					tfOutputFile.setText(outputFileName);
 				}				

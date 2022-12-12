@@ -19,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JTextField;
 import javax.swing.DefaultListModel;
@@ -32,6 +33,7 @@ public class LocalWindow extends JFrame {
 
 	public String inputFile;
 	public String outputFileName;
+	public String fileName;
 	public String statisticType;
 	private JTextField tfOutputFile;
 
@@ -53,10 +55,11 @@ public class LocalWindow extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param acActionListenertionListener 
 	 */
 	public LocalWindow(final HashMap<String,Integer> hm,final ArrayList<Layer> layers) {
 		setTitle("LocalStatistic");
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 663, 469);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));	
@@ -210,7 +213,12 @@ public class LocalWindow extends JFrame {
 				int result = fileChooser.showSaveDialog(LocalWindow.this);
 				if (result == JFileChooser.APPROVE_OPTION) {					
 					outputFileName=fileChooser.getSelectedFile().getPath();
-					//							String fileName=fileChooser.getSelectedFile().getName();				
+					
+					String fileName=fileChooser.getSelectedFile().getName();					
+					if(fileName.indexOf(".txt")==-1) {
+						outputFileName=outputFileName+".txt";
+						fileName=fileName+".txt";
+					}
 					fileChooser.setVisible(true);
 					tfOutputFile.setText(outputFileName);
 				}				
@@ -246,14 +254,15 @@ public class LocalWindow extends JFrame {
 				if(count==0 || outputFileName==null) {
 					JOptionPane.showMessageDialog(new JFrame(), "fail");
 					return;
-				}			
+				}	
 				
 				if(count==1) {
 					String file1Name=(String)fileListModel.getElementAt(0);
 					Layer layer1=layers.get(hm.get(file1Name));
 					layer1.save(outputFileName);
+					setVisible(false);
 					return;
-				}
+				}			
 				
 				switch(statisticType) {
 				case "VARIETY":
@@ -310,7 +319,7 @@ public class LocalWindow extends JFrame {
 					break;
 				default:
 					break;
-				}
+				}			
 
 				dispose();
 
@@ -377,6 +386,14 @@ public class LocalWindow extends JFrame {
 		});
 
 
+	}
+	
+	public String getFilePath() {
+		return outputFileName;
+	}
+	
+	public String getLayerName() {
+		return fileName;
 	}
 
 }
