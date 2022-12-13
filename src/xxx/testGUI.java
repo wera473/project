@@ -251,7 +251,7 @@ public class testGUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				LocalWindow frame = new LocalWindow(hm,layers);
+				LocalWindow frame = new LocalWindow(testGUI.this);
 				frame.setVisible(true);	
 			}
 		});
@@ -262,7 +262,7 @@ public class testGUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				FocalWindow frame = new FocalWindow(hm,layers);
+				FocalWindow frame = new FocalWindow(testGUI.this);
 
 
 				frame.setVisible(true);
@@ -275,7 +275,7 @@ public class testGUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				ZonalWindow frame = new ZonalWindow(hm,layers);
+				ZonalWindow frame = new ZonalWindow(testGUI.this);
 				frame.setVisible(true);
 			}
 
@@ -548,7 +548,8 @@ public class testGUI extends JFrame {
 	}
 
 	public void newFile(String filePath, String layerName) {		
-		//-------------------------add file content to fileWindow		
+		//-------------------------add file content to fileWindow
+		System.out.println("fileName: " + layerName);
 		MutableTreeNode parentNode=new DefaultMutableTreeNode(filePath);
 		MutableTreeNode childNode=new DefaultMutableTreeNode(layerName);
 

@@ -38,9 +38,12 @@ public class FocalWindow extends JFrame {
 	
 	public String inputFile;
 	public String outputFileName;
+	public String fileName;
 	public boolean isSquare; 
 	public int radius;
 	public String statisticType;
+	
+	public boolean isNew;
 
 //	/**
 //	 * Launch the application.
@@ -61,7 +64,7 @@ public class FocalWindow extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public FocalWindow(final HashMap<String,Integer> hm,final ArrayList<Layer> layers) {		
+	public FocalWindow(testGUI gui) {		
 		setTitle("FocalStatistic");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 609, 412);
@@ -176,7 +179,7 @@ public class FocalWindow extends JFrame {
 		contentPane.add(btnCancle, gbc_btnCancle);
 		
 		//-------------------------input file 
-		for(String k:hm.keySet()) {
+		for(String k:gui.hm.keySet()) {
 			cbInputFile.addItem(k);
 		}
 		
@@ -194,6 +197,7 @@ public class FocalWindow extends JFrame {
 		//-------------------------output file
 		final JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setAcceptAllFileFilterUsed(false);
+		fileChooser.setCurrentDirectory(new File("."));
 		fileChooser.addChoosableFileFilter(new FileFilter() {
 			public String getDescription() {
 				return "ASCII (*.txt)";
@@ -215,7 +219,7 @@ public class FocalWindow extends JFrame {
 				if (result == JFileChooser.APPROVE_OPTION) {					
 					outputFileName=fileChooser.getSelectedFile().getPath();
 
-					String fileName=fileChooser.getSelectedFile().getName();					
+					fileName=fileChooser.getSelectedFile().getName();					
 					if(fileName.indexOf(".txt")==-1) {
 						outputFileName=outputFileName+".txt";
 					}
@@ -321,35 +325,36 @@ public class FocalWindow extends JFrame {
 					return;
 				}
 				
-				int layerIndex=hm.get(inputFile);			
+				int layerIndex=gui.hm.get(inputFile);			
 				
 				Layer newlayer;
 				
 				switch(statisticType) {
 					case "VARIETY":
-						newlayer=layers.get(layerIndex).focalVariety(radius, isSquare, "layer");
+						newlayer=gui.layers.get(layerIndex).focalVariety(radius, isSquare, "layer");
 						newlayer.save(outputFileName);
 						break;
 					case "MAXIMUM":
-						newlayer=layers.get(layerIndex).focalMaximum(radius, isSquare, "layer");
+						newlayer=gui.layers.get(layerIndex).focalMaximum(radius, isSquare, "layer");
 						newlayer.save(outputFileName);
 						break;
 					case "MINIMUM":
-						newlayer=layers.get(layerIndex).focalMinimum(radius, isSquare, "layer");
+						newlayer=gui.layers.get(layerIndex).focalMinimum(radius, isSquare, "layer");
 						newlayer.save(outputFileName);
 						break;
 					case "SUM":
-						newlayer=layers.get(layerIndex).focalSum(radius, isSquare, "layer");
+						newlayer=gui.layers.get(layerIndex).focalSum(radius, isSquare, "layer");
 						newlayer.save(outputFileName);
 						break;
 					case "MEAN":
-						newlayer=layers.get(layerIndex).focalMean(radius, isSquare, "layer");
+						newlayer=gui.layers.get(layerIndex).focalMean(radius, isSquare, "layer");
 						newlayer.save(outputFileName);
 						break;
 					default:
 						break;
 				}
 				
+				gui.newFile(outputFileName, fileName);
 				dispose();
 				
 			}

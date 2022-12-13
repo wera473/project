@@ -36,7 +36,10 @@ public class ZonalWindow extends JFrame {
 	public String inputZonalFile;
 	public String inputValueFile;
 	public String outputFileName;
+	public String fileName;
 	public String statisticType;
+	
+	public boolean isNew;
 
 	/**
 	 * Launch the application.
@@ -57,7 +60,7 @@ public class ZonalWindow extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ZonalWindow(final HashMap<String,Integer> hm,final ArrayList<Layer> layers) {
+	public ZonalWindow(testGUI gui) {
 		setTitle("ZonalStatistic");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 588, 381);
@@ -159,7 +162,7 @@ public class ZonalWindow extends JFrame {
 
 
 		//-------------------------input zonal file
-		for(String k:hm.keySet()) {
+		for(String k:gui.hm.keySet()) {
 			cbInputZoneFile.addItem(k);
 		}
 
@@ -175,7 +178,7 @@ public class ZonalWindow extends JFrame {
 		});
 
 		//-------------------------input value file		
-		for(String k:hm.keySet()) {
+		for(String k:gui.hm.keySet()) {
 			cbInputValueFile.addItem(k);
 		}
 
@@ -194,6 +197,7 @@ public class ZonalWindow extends JFrame {
 		//		btnOutputFile
 		final JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setAcceptAllFileFilterUsed(false);
+		fileChooser.setCurrentDirectory(new File("."));
 		fileChooser.addChoosableFileFilter(new FileFilter() {
 			public String getDescription() {
 				return "ASCII (*.txt)";
@@ -215,7 +219,7 @@ public class ZonalWindow extends JFrame {
 				if (result == JFileChooser.APPROVE_OPTION) {					
 					outputFileName=fileChooser.getSelectedFile().getPath();
 					
-					String fileName=fileChooser.getSelectedFile().getName();					
+					fileName=fileChooser.getSelectedFile().getName();					
 					if(fileName.indexOf(".txt")==-1) {
 						outputFileName=outputFileName+".txt";
 					}
@@ -263,11 +267,11 @@ public class ZonalWindow extends JFrame {
 					return;
 				}
 
-				int zonalLayerIndex=hm.get(inputZonalFile);
-				int valueLayerIndex=hm.get(inputValueFile);				
+				int zonalLayerIndex=gui.hm.get(inputZonalFile);
+				int valueLayerIndex=gui.hm.get(inputValueFile);				
 
-				Layer zonalLayer=layers.get(zonalLayerIndex);
-				Layer valueLayer=layers.get(valueLayerIndex);
+				Layer zonalLayer=gui.layers.get(zonalLayerIndex);
+				Layer valueLayer=gui.layers.get(valueLayerIndex);
 
 				Layer newlayer;
 
@@ -295,7 +299,8 @@ public class ZonalWindow extends JFrame {
 				default:
 					break;
 				}
-
+				
+				gui.newFile(outputFileName, fileName);
 				dispose();
 
 			}
