@@ -7,6 +7,8 @@ import java.util.HashMap;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileFilter;
+
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
@@ -20,6 +22,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
 import javax.swing.JTextField;
 import javax.swing.DefaultListModel;
@@ -207,10 +210,24 @@ public class LocalWindow extends JFrame {
 		});
 
 		//-------------------------output file
+		final JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		fileChooser.addChoosableFileFilter(new FileFilter() {
+			public String getDescription() {
+				return "ASCII (*.txt)";
+			}
+			public boolean accept(File f) {
+				if (f.isDirectory()) {
+
+					return true;
+				} else {
+					return f.getName().toLowerCase().endsWith(".txt");
+				}
+			}
+		});
 		btnOutputFile.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
-				JFileChooser fileChooser=new JFileChooser(".");				
+			public void mouseClicked(MouseEvent e) {		
 				int result = fileChooser.showSaveDialog(LocalWindow.this);
 				if (result == JFileChooser.APPROVE_OPTION) {					
 					outputFileName=fileChooser.getSelectedFile().getPath();

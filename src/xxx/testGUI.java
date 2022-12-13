@@ -327,7 +327,7 @@ public class testGUI extends JFrame {
 		JMenuItem mntmSave = new JMenuItem("Save");
 		mntmSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
-				JFileChooser fileChooser=new JFileChooser(".");				
+//				JFileChooser fileChooser=new JFileChooser(".");				
 				int result = fileChooser.showSaveDialog(testGUI.this);	
 				if (result == JFileChooser.APPROVE_OPTION) {					
 					String outputFileName=fileChooser.getSelectedFile().getPath();					
@@ -363,7 +363,6 @@ public class testGUI extends JFrame {
 		contentPane.add(fileWindow,BorderLayout.WEST);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-
 
 		//---------------
 		fileTree.addTreeSelectionListener(new TreeSelectionListener() {

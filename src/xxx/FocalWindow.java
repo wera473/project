@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -191,10 +192,25 @@ public class FocalWindow extends JFrame {
 		});
 		
 		//-------------------------output file
+		final JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		fileChooser.addChoosableFileFilter(new FileFilter() {
+			public String getDescription() {
+				return "ASCII (*.txt)";
+			}
+			public boolean accept(File f) {
+				if (f.isDirectory()) {
+
+					return true;
+				} else {
+					return f.getName().toLowerCase().endsWith(".txt");
+				}
+			}
+		});
 		btnOutputFile.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				JFileChooser fileChooser=new JFileChooser(".");				
+//				JFileChooser fileChooser=new JFileChooser(".");				
 				int result = fileChooser.showSaveDialog(FocalWindow.this);
 				if (result == JFileChooser.APPROVE_OPTION) {					
 					outputFileName=fileChooser.getSelectedFile().getPath();

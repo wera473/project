@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileFilter;
+
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -16,6 +18,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -189,10 +192,25 @@ public class ZonalWindow extends JFrame {
 		//-------------------------output file
 		//		tfOutputFile
 		//		btnOutputFile
+		final JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		fileChooser.addChoosableFileFilter(new FileFilter() {
+			public String getDescription() {
+				return "ASCII (*.txt)";
+			}
+			public boolean accept(File f) {
+				if (f.isDirectory()) {
+
+					return true;
+				} else {
+					return f.getName().toLowerCase().endsWith(".txt");
+				}
+			}
+		});
 		btnOutputFile.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				JFileChooser fileChooser=new JFileChooser(".");				
+//				JFileChooser fileChooser=new JFileChooser(".");				
 				int result = fileChooser.showSaveDialog(ZonalWindow.this);
 				if (result == JFileChooser.APPROVE_OPTION) {					
 					outputFileName=fileChooser.getSelectedFile().getPath();
