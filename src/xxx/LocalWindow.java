@@ -7,6 +7,8 @@ import java.util.HashMap;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileFilter;
+
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
@@ -19,6 +21,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.io.File;
 
 import javax.swing.JTextField;
 import javax.swing.DefaultListModel;
@@ -32,6 +36,7 @@ public class LocalWindow extends JFrame {
 
 	public String inputFile;
 	public String outputFileName;
+	public String fileName;
 	public String statisticType;
 	private JTextField tfOutputFile;
 
@@ -53,10 +58,12 @@ public class LocalWindow extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param actionListener 
+	 * @param acActionListenertionListener 
 	 */
-	public LocalWindow(final HashMap<String,Integer> hm,final ArrayList<Layer> layers) {
+	public LocalWindow(testGUI gui) {
 		setTitle("LocalStatistic");
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 663, 469);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));	
@@ -162,7 +169,7 @@ public class LocalWindow extends JFrame {
 		contentPane.add(btnCancle, gbc_btnCancle);
 
 		//-------------------------input file 
-		for(String k:hm.keySet()) {
+		for(String k:gui.hm.keySet()) {
 			cbInputFile.addItem(k);
 		}
 		
@@ -203,14 +210,34 @@ public class LocalWindow extends JFrame {
 		});
 
 		//-------------------------output file
+		final JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		fileChooser.setCurrentDirectory(new File("."));
+		fileChooser.addChoosableFileFilter(new FileFilter() {
+			public String getDescription() {
+				return "ASCII (*.txt)";
+			}
+			public boolean accept(File f) {
+				if (f.isDirectory()) {
+
+					return true;
+				} else {
+					return f.getName().toLowerCase().endsWith(".txt");
+				}
+			}
+		});
 		btnOutputFile.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
-				JFileChooser fileChooser=new JFileChooser(".");				
+			public void mouseClicked(MouseEvent e) {		
 				int result = fileChooser.showSaveDialog(LocalWindow.this);
 				if (result == JFileChooser.APPROVE_OPTION) {					
 					outputFileName=fileChooser.getSelectedFile().getPath();
-					//							String fileName=fileChooser.getSelectedFile().getName();				
+					
+					fileName=fileChooser.getSelectedFile().getName();					
+					if(fileName.indexOf(".txt")==-1) {
+						outputFileName=outputFileName+".txt";
+						fileName=fileName+".txt";
+					}
 					fileChooser.setVisible(true);
 					tfOutputFile.setText(outputFileName);
 				}				
@@ -246,22 +273,26 @@ public class LocalWindow extends JFrame {
 				if(count==0 || outputFileName==null) {
 					JOptionPane.showMessageDialog(new JFrame(), "fail");
 					return;
-				}			
+				}	
+				
+//				System.out.println("local"+":   "+fileName);
 				
 				if(count==1) {
 					String file1Name=(String)fileListModel.getElementAt(0);
-					Layer layer1=layers.get(hm.get(file1Name));
+					Layer layer1=gui.layers.get(gui.hm.get(file1Name));
 					layer1.save(outputFileName);
+					gui.newFile(outputFileName, fileName);
+					dispose();
 					return;
-				}
+				}			
 				
 				switch(statisticType) {
 				case "VARIETY":
 					if(count == 2) {
 						String file1Name=(String)fileListModel.getElementAt(0);
-						Layer layer1=layers.get(hm.get(file1Name));
+						Layer layer1=gui.layers.get(gui.hm.get(file1Name));
 						String file2Name=(String)fileListModel.getElementAt(1);
-						Layer layer2=layers.get(hm.get(file2Name));
+						Layer layer2=gui.layers.get(gui.hm.get(file2Name));
 						Layer[] inLayers = {layer1,layer2};
 						Layer newLayer = xxx.Algorithm.localVariety(inLayers,"layer");
 						newLayer.save(outputFileName);
@@ -271,9 +302,9 @@ public class LocalWindow extends JFrame {
 				case "MAXIMUM":
 					if(count == 2) {
 						String file1Name=(String)fileListModel.getElementAt(0);
-						Layer layer1=layers.get(hm.get(file1Name));
+						Layer layer1=gui.layers.get(gui.hm.get(file1Name));
 						String file2Name=(String)fileListModel.getElementAt(1);
-						Layer layer2=layers.get(hm.get(file2Name));
+						Layer layer2=gui.layers.get(gui.hm.get(file2Name));
 						Layer newLayer = layer1.localMaximum(layer2, "layer");
 						newLayer.save(outputFileName);
 					}
@@ -281,9 +312,9 @@ public class LocalWindow extends JFrame {
 				case "MINIMUM":	
 					if(count == 2) {
 						String file1Name=(String)fileListModel.getElementAt(0);
-						Layer layer1=layers.get(hm.get(file1Name));
+						Layer layer1=gui.layers.get(gui.hm.get(file1Name));
 						String file2Name=(String)fileListModel.getElementAt(1);
-						Layer layer2=layers.get(hm.get(file2Name));
+						Layer layer2=gui.layers.get(gui.hm.get(file2Name));
 						Layer newLayer = layer1.localMinimum(layer2, "layer");
 						newLayer.save(outputFileName);
 					}
@@ -291,9 +322,9 @@ public class LocalWindow extends JFrame {
 				case "SUM":
 					if(count==2) {
 						String file1Name=(String)fileListModel.getElementAt(0);
-						Layer layer1=layers.get(hm.get(file1Name));
+						Layer layer1=gui.layers.get(gui.hm.get(file1Name));
 						String file2Name=(String)fileListModel.getElementAt(1);
-						Layer layer2=layers.get(hm.get(file2Name));
+						Layer layer2=gui.layers.get(gui.hm.get(file2Name));
 						Layer newLayer=layer1.localSum(layer2, "layer");
 						newLayer.save(outputFileName);
 					}
@@ -301,9 +332,9 @@ public class LocalWindow extends JFrame {
 				case "MEAN":
 					if(count==2) {
 						String file1Name=(String)fileListModel.getElementAt(0);
-						Layer layer1=layers.get(hm.get(file1Name));
+						Layer layer1=gui.layers.get(gui.hm.get(file1Name));
 						String file2Name=(String)fileListModel.getElementAt(1);
-						Layer layer2=layers.get(hm.get(file2Name));
+						Layer layer2=gui.layers.get(gui.hm.get(file2Name));
 						Layer newLayer = layer1.localMean(layer2, "layer");
 						newLayer.save(outputFileName);
 					}
@@ -311,8 +342,11 @@ public class LocalWindow extends JFrame {
 				default:
 					break;
 				}
-
+				
+				gui.newFile(outputFileName, fileName);
+				
 				dispose();
+//				dispatchEvent(new WindowEvent(LocalWindow.this,WindowEvent.WINDOW_CLOSING));
 
 			}
 
@@ -377,6 +411,14 @@ public class LocalWindow extends JFrame {
 		});
 
 
+	}
+	
+	public String getFilePath() {
+		return outputFileName;
+	}
+	
+	public String getLayerName() {
+		return fileName;
 	}
 
 }

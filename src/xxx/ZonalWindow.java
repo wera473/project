@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileFilter;
+
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -16,6 +18,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -33,7 +36,10 @@ public class ZonalWindow extends JFrame {
 	public String inputZonalFile;
 	public String inputValueFile;
 	public String outputFileName;
+	public String fileName;
 	public String statisticType;
+	
+	public boolean isNew;
 
 	/**
 	 * Launch the application.
@@ -54,9 +60,9 @@ public class ZonalWindow extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ZonalWindow(final HashMap<String,Integer> hm,final ArrayList<Layer> layers) {
+	public ZonalWindow(testGUI gui) {
 		setTitle("ZonalStatistic");
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 588, 381);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -156,7 +162,7 @@ public class ZonalWindow extends JFrame {
 
 
 		//-------------------------input zonal file
-		for(String k:hm.keySet()) {
+		for(String k:gui.hm.keySet()) {
 			cbInputZoneFile.addItem(k);
 		}
 
@@ -172,7 +178,7 @@ public class ZonalWindow extends JFrame {
 		});
 
 		//-------------------------input value file		
-		for(String k:hm.keySet()) {
+		for(String k:gui.hm.keySet()) {
 			cbInputValueFile.addItem(k);
 		}
 
@@ -189,16 +195,38 @@ public class ZonalWindow extends JFrame {
 		//-------------------------output file
 		//		tfOutputFile
 		//		btnOutputFile
+		final JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		fileChooser.setCurrentDirectory(new File("."));
+		fileChooser.addChoosableFileFilter(new FileFilter() {
+			public String getDescription() {
+				return "ASCII (*.txt)";
+			}
+			public boolean accept(File f) {
+				if (f.isDirectory()) {
+
+					return true;
+				} else {
+					return f.getName().toLowerCase().endsWith(".txt");
+				}
+			}
+		});
 		btnOutputFile.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				JFileChooser fileChooser=new JFileChooser(".");				
+//				JFileChooser fileChooser=new JFileChooser(".");				
 				int result = fileChooser.showSaveDialog(ZonalWindow.this);
 				if (result == JFileChooser.APPROVE_OPTION) {					
 					outputFileName=fileChooser.getSelectedFile().getPath();
-					//					String fileName=fileChooser.getSelectedFile().getName();				
+					
+					fileName=fileChooser.getSelectedFile().getName();					
+					if(fileName.indexOf(".txt")==-1) {
+						outputFileName=outputFileName+".txt";
+					}
+					
 					fileChooser.setVisible(true);
 					tfOutputFile.setText(outputFileName);
+					
 				}				
 			}
 		});		
@@ -239,11 +267,11 @@ public class ZonalWindow extends JFrame {
 					return;
 				}
 
-				int zonalLayerIndex=hm.get(inputZonalFile);
-				int valueLayerIndex=hm.get(inputValueFile);				
+				int zonalLayerIndex=gui.hm.get(inputZonalFile);
+				int valueLayerIndex=gui.hm.get(inputValueFile);				
 
-				Layer zonalLayer=layers.get(zonalLayerIndex);
-				Layer valueLayer=layers.get(valueLayerIndex);
+				Layer zonalLayer=gui.layers.get(zonalLayerIndex);
+				Layer valueLayer=gui.layers.get(valueLayerIndex);
 
 				Layer newlayer;
 
@@ -271,7 +299,8 @@ public class ZonalWindow extends JFrame {
 				default:
 					break;
 				}
-
+				
+				gui.newFile(outputFileName, fileName);
 				dispose();
 
 			}
