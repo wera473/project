@@ -60,6 +60,8 @@ import javax.swing.JToolBar;
 import javax.swing.JLabel;
 import java.awt.Color;
 import javax.swing.ImageIcon;
+import java.awt.FlowLayout;
+import javax.swing.JSpinner;
 public class testGUI extends JFrame {
 
 	private JPanel contentPane;
@@ -85,7 +87,13 @@ public class testGUI extends JFrame {
 	public HashMap<String,Integer> hm; //layername,index
 
 	final JLabel lblNewLabel;
-
+	
+	private JPanel statusbar;
+	
+	//Design Colors
+	Color perogi = new Color(254, 234, 132);
+	Color darkblue = new Color(	23, 34, 67);
+	Color lightblue  = new Color(76, 127, 200);
 
 	/**
 	 * Launch the application.
@@ -104,7 +112,8 @@ public class testGUI extends JFrame {
 							// TODO Auto-generated method stub
 							System.out.println(e.getComponent().getHeight());
 							frame.fileWindow.setBounds(0,0,200,e.getComponent().getHeight()-100);
-							frame.lblNewLabel.setBounds(10, e.getComponent().getHeight()-100, 100, 32);
+						//	frame.lblNewLabel.setBounds(10, e.getComponent().getHeight()-100, 100, 32);
+							frame.statusbar.setBounds(0, e.getComponent().getHeight()-100, 1000, 32);
 
 						}
 
@@ -139,11 +148,15 @@ public class testGUI extends JFrame {
 	 * Create the frame.
 	 */
 	public testGUI() {
+
 		setBackground(new Color(255, 255, 255));
-		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Wera\\Documents\\lab5\\3357797.png"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Gebruiker\\OneDrive\\Documenten\\GitHub\\project\\src\\xxx\\perogi.jfif"));
 		setTitle("GIteSt");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 800);
+
+		//set icon
+		//image icon = Toolkit.getDefaultToolkit().getImage()
 
 		rootNode=new DefaultMutableTreeNode(null);
 		fileTreeModel=new DefaultTreeModel(rootNode);
@@ -327,7 +340,7 @@ public class testGUI extends JFrame {
 		JMenuItem mntmSave = new JMenuItem("Save");
 		mntmSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
-//				JFileChooser fileChooser=new JFileChooser(".");				
+				//				JFileChooser fileChooser=new JFileChooser(".");				
 				int result = fileChooser.showSaveDialog(testGUI.this);	
 				if (result == JFileChooser.APPROVE_OPTION) {					
 					String outputFileName=fileChooser.getSelectedFile().getPath();					
@@ -436,14 +449,14 @@ public class testGUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-//				System.out.println("delete");
+				//				System.out.println("delete");
 				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) fileTree.getLastSelectedPathComponent();				
 				int selectNodeIndex=hm.get(selectedNode.getUserObject());			
 				if(selectNodeIndex==currentLayer) {
 					System.out.println("current");
 					mapPanel.get(currentLayer).setVisible(false);
 					currentLayer=-1;					
-//					contentPane.repaint();
+					//					contentPane.repaint();
 				}
 				layers.remove(selectNodeIndex);
 				layerCount--;
@@ -451,7 +464,7 @@ public class testGUI extends JFrame {
 				hm.remove(selectedNode.getUserObject());
 				hmIndexRefresh(hm);				
 				System.out.println(layers.size()+" "+hm.size());
-				
+
 				fileTreeModel.removeNodeFromParent((MutableTreeNode) selectedNode.getParent());
 			}
 
@@ -492,11 +505,46 @@ public class testGUI extends JFrame {
 		});
 
 		lblNewLabel = new JLabel("");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		lblNewLabel.setBounds(10, this.getHeight()-100, 200, 32);
-		contentPane.add(lblNewLabel); 
-		lblNewLabel.setPreferredSize(new Dimension(contentPane.getWidth(), 16));
+	//	lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
+	//	lblNewLabel.setBounds(10, this.getHeight()-100, 200, 32);
+	//	contentPane.add(lblNewLabel); 
+	//	lblNewLabel.setPreferredSize(new Dimension(contentPane.getWidth(), 16));
 
+
+
+		statusbar = new JPanel();
+		statusbar.setPreferredSize(new Dimension(contentPane.getWidth(), 32));
+		statusbar.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		statusbar.setBounds(0, 1000, 1000, 41);
+		statusbar.setBackground(darkblue);
+		contentPane.add(statusbar);
+		
+		JLabel StatusBar = new JLabel("Status Bar");
+		StatusBar.setForeground(perogi);
+		StatusBar.setBackground(darkblue);
+		statusbar.add(StatusBar);
+		
+
+		JLabel lblNewLabel1 = new JLabel("");
+		lblNewLabel1.setForeground(perogi);
+		statusbar.add(lblNewLabel1);
+		
+		JSpinner scalebar = new JSpinner();
+		
+		scalebar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
+		statusbar.add(scalebar);
+		
+		JLabel cellval = new JLabel("Cell Value");
+		cellval.setForeground(perogi);
+		statusbar.add(cellval);
+		
+		JLabel cellid = new JLabel("Cell ID");
+		cellid.setForeground(perogi);
+		statusbar.add(cellid);
 
 		//lblNewLabel.setLayout((LayoutManager) new BoxLayout(lblNewLabel, BoxLayout.Y_AXIS));
 
@@ -540,7 +588,7 @@ public class testGUI extends JFrame {
 				String displayText = (mousePrevX+" "+mousePrevY);
 
 				lblNewLabel.setText("X = "+e.getX()+" ; Y = "+e.getY());
-
+				lblNewLabel1.setText("X = "+e.getX()+" ; Y = "+e.getY());
 				// System.out.println(mousePrevX+" "+mousePrevY); 
 			}
 
@@ -558,7 +606,7 @@ public class testGUI extends JFrame {
 
 		fileTree.expandRow(0);
 		fileTree.expandRow(1);	
-		
+
 		//		System.out.println(fileTree.getRowCount());
 
 		System.out.println("Selected file: " + 
@@ -584,10 +632,10 @@ public class testGUI extends JFrame {
 
 		hm.put(layerName, currentLayer);
 		//		System.out.println(layerName+" "+currentLayer);
-		System.out.println("hoi");		
+
 
 	}
-	
+
 	public void hmIndexRefresh(HashMap<String,Integer> hm) {
 		int index=0;
 		for(String s:hm.keySet()) {
