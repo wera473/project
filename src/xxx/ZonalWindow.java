@@ -177,7 +177,8 @@ public class ZonalWindow extends JFrame {
 				+ "Output file: the calculated result. \r\n"
 				+ "\r\n"
 				+ "Statistic type: SUM, VARIETY, MAXIMUM, MINIMUM, MEAN");
-		
+		tpDescription.setEditable(false);
+
 		
 		
 		//		inputZonalFile;

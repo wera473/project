@@ -195,6 +195,9 @@ public class FocalWindow extends JFrame {
 				+ "Radius: number of cell around each cell. \r\n"
 				+ "\r\n"
 				+ "Statistic type: SUM, VARIETY, MAXIMUM, MINIMUM, MEAN");
+		
+		tpDescription.setEditable(false);
+
 
 		//-------------------------input file 
 		for(String k:gui.hm.keySet()) {
