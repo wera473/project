@@ -29,6 +29,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JTextPane;
 
 public class LocalWindow extends JFrame {
 
@@ -64,15 +65,15 @@ public class LocalWindow extends JFrame {
 	public LocalWindow(testGUI gui) {
 		setTitle("LocalStatistic");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 663, 469);
+		setBounds(100, 100, 856, 504);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));	
 
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[]{375, 86, 78, 78, 0};
-		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_contentPane.columnWeights = new double[]{1.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.columnWidths = new int[]{351, 55, 0, 0, 51, 78, 0};
+		gbl_contentPane.rowHeights = new int[]{0, 18, 0, 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_contentPane.columnWeights = new double[]{1.0, 1.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 
@@ -91,6 +92,16 @@ public class LocalWindow extends JFrame {
 		gbc_cbInputFile.gridx = 0;
 		gbc_cbInputFile.gridy = 1;
 		contentPane.add(cbInputFile, gbc_cbInputFile);
+
+		JTextPane tpDescription = new JTextPane();
+		GridBagConstraints gbc_tpDescription = new GridBagConstraints();
+		gbc_tpDescription.gridheight = 12;
+		gbc_tpDescription.gridwidth = 2;
+		gbc_tpDescription.insets = new Insets(0, 0, 5, 0);
+		gbc_tpDescription.fill = GridBagConstraints.BOTH;
+		gbc_tpDescription.gridx = 4;
+		gbc_tpDescription.gridy = 1;
+		contentPane.add(tpDescription, gbc_tpDescription);
 
 		JButton btnAdd = new JButton("add");
 		GridBagConstraints gbc_btnAdd = new GridBagConstraints();
@@ -158,125 +169,25 @@ public class LocalWindow extends JFrame {
 		JButton btnOk = new JButton("Ok");
 		GridBagConstraints gbc_btnOk = new GridBagConstraints();
 		gbc_btnOk.insets = new Insets(0, 0, 0, 5);
-		gbc_btnOk.gridx = 2;
+		gbc_btnOk.gridx = 1;
 		gbc_btnOk.gridy = 13;
 		contentPane.add(btnOk, gbc_btnOk);
 
-		JButton btnCancle = new JButton("Cancel");
-		GridBagConstraints gbc_btnCancle = new GridBagConstraints();
-		gbc_btnCancle.gridx = 3;
-		gbc_btnCancle.gridy = 13;
-		contentPane.add(btnCancle, gbc_btnCancle);
 
-		//-------------------------input file 
-		for(String k:gui.hm.keySet()) {
-			cbInputFile.addItem(k);
-		}
-		
-		inputFile=(String) cbInputFile.getItemAt(0); //default
-
-		cbInputFile.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				inputFile = (String) cbInputFile.getSelectedItem();
-				//System.out.println("选择的选项是: " + selectedItem);								
-			}			
-		});
-
-		//-------------------------file list	
-		btnAdd.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				if(fileListModel.getSize()<2) {
-					String selectItem=(String) cbInputFile.getSelectedItem();
-					fileListModel.addElement(selectItem);
-				}
-			}
-
-		});
-
-		btnDelete.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				int index = listFileList.getSelectedIndex();
-				if(index>=0) {
-					fileListModel.remove(index);
-				}				
-			}
-
-		});
-
-		//-------------------------output file
-		final JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setAcceptAllFileFilterUsed(false);
-		fileChooser.setCurrentDirectory(new File("."));
-		fileChooser.addChoosableFileFilter(new FileFilter() {
-			public String getDescription() {
-				return "ASCII (*.txt)";
-			}
-			public boolean accept(File f) {
-				if (f.isDirectory()) {
-
-					return true;
-				} else {
-					return f.getName().toLowerCase().endsWith(".txt");
-				}
-			}
-		});
-		btnOutputFile.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {		
-				int result = fileChooser.showSaveDialog(LocalWindow.this);
-				if (result == JFileChooser.APPROVE_OPTION) {					
-					outputFileName=fileChooser.getSelectedFile().getPath();
-					
-					fileName=fileChooser.getSelectedFile().getName();					
-					if(fileName.indexOf(".txt")==-1) {
-						outputFileName=outputFileName+".txt";
-						fileName=fileName+".txt";
-					}
-					fileChooser.setVisible(true);
-					tfOutputFile.setText(outputFileName);
-				}				
-			}
-		});
-
-		//-------------------------statistic type
-		cbStatisticType.addItem("SUM");
-		cbStatisticType.addItem("VARIETY");
-		cbStatisticType.addItem("MAXIMUM");
-		cbStatisticType.addItem("MINIMUM");		
-		cbStatisticType.addItem("MEAN");
-
-		//the first item added is default
-		statisticType=(String) cbStatisticType.getItemAt(0); 
-
-		cbStatisticType.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub				
-				statisticType = (String) cbStatisticType.getSelectedItem();				
-			}			
-		});
-		
-		
 		//-------------------------click ok
 		btnOk.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 				int count=fileListModel.getSize();
 				if(count==0 || outputFileName==null) {
 					JOptionPane.showMessageDialog(new JFrame(), "fail");
 					return;
 				}	
-				
-//				System.out.println("local"+":   "+fileName);
-				
+
+				//				System.out.println("local"+":   "+fileName);
+
 				if(count==1) {
 					String file1Name=(String)fileListModel.getElementAt(0);
 					Layer layer1=gui.layers.get(gui.hm.get(file1Name));
@@ -285,7 +196,7 @@ public class LocalWindow extends JFrame {
 					dispose();
 					return;
 				}			
-				
+
 				switch(statisticType) {
 				case "VARIETY":
 					if(count == 2) {
@@ -342,11 +253,11 @@ public class LocalWindow extends JFrame {
 				default:
 					break;
 				}
-				
+
 				gui.newFile(outputFileName, fileName);
-				
+
 				dispose();
-//				dispatchEvent(new WindowEvent(LocalWindow.this,WindowEvent.WINDOW_CLOSING));
+				//				dispatchEvent(new WindowEvent(LocalWindow.this,WindowEvent.WINDOW_CLOSING));
 
 			}
 
@@ -374,6 +285,113 @@ public class LocalWindow extends JFrame {
 
 			}			
 		});
+
+		//-------------------------description
+		tpDescription.setText("LocalStatistic:\n"
+				+ "Calculates a per-cell statistic from multiple files.\r\n"
+				+ "\r\n"
+				+ "Input file: A list of files for which a statistic will be calculated by each cell\n"
+				+ "Now only up to two files can be calculated !!! \r\n"
+				+ "\r\n"
+				+ "Output file: the calculated result. \r\n"
+				+ "\r\n"
+				+ "Statistic type: SUM, VARIETY, MAXIMUM, MINIMUM, MEAN");
+
+
+		//-------------------------input file 
+		for(String k:gui.hm.keySet()) {
+			cbInputFile.addItem(k);
+		}
+
+		inputFile=(String) cbInputFile.getItemAt(0); //default
+
+		cbInputFile.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				inputFile = (String) cbInputFile.getSelectedItem();
+				//System.out.println("选择的选项是: " + selectedItem);								
+			}			
+		});
+
+		//-------------------------file list	
+		btnAdd.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(fileListModel.getSize()<2) {
+					String selectItem=(String) cbInputFile.getSelectedItem();
+					fileListModel.addElement(selectItem);
+				}
+			}
+
+		});
+
+		btnDelete.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				int index = listFileList.getSelectedIndex();
+				if(index>=0) {
+					fileListModel.remove(index);
+				}				
+			}
+
+		});
+
+		//-------------------------output file
+		final JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		fileChooser.setCurrentDirectory(new File("."));
+		fileChooser.addChoosableFileFilter(new FileFilter() {
+			public String getDescription() {
+				return "ASCII (*.txt)";
+			}
+			public boolean accept(File f) {
+				if (f.isDirectory()) {
+
+					return true;
+				} else {
+					return f.getName().toLowerCase().endsWith(".txt");
+				}
+			}
+		});
+
+		//default file path
+		outputFileName=(String) fileChooser.getCurrentDirectory().getPath() + "\\localoperation.txt";
+		tfOutputFile.setText(outputFileName);
+
+		btnOutputFile.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {		
+				int result = fileChooser.showSaveDialog(LocalWindow.this);
+				if (result == JFileChooser.APPROVE_OPTION) {					
+					outputFileName=fileChooser.getSelectedFile().getPath();
+
+					fileName=fileChooser.getSelectedFile().getName();					
+					if(fileName.indexOf(".txt")==-1) {
+						outputFileName=outputFileName+".txt";
+						fileName=fileName+".txt";
+					}
+					fileChooser.setVisible(true);
+					tfOutputFile.setText(outputFileName);
+				}				
+			}
+		});
+
+		//-------------------------statistic type
+		cbStatisticType.addItem("SUM");
+		cbStatisticType.addItem("VARIETY");
+		cbStatisticType.addItem("MAXIMUM");
+		cbStatisticType.addItem("MINIMUM");		
+		cbStatisticType.addItem("MEAN");
+
+		JButton btnCancle = new JButton("Cancel");
+		GridBagConstraints gbc_btnCancle = new GridBagConstraints();
+		gbc_btnCancle.insets = new Insets(0, 0, 0, 5);
+		gbc_btnCancle.gridx = 2;
+		gbc_btnCancle.gridy = 13;
+		contentPane.add(btnCancle, gbc_btnCancle);
 
 		//-------------------------click cancle
 		btnCancle.addMouseListener(new MouseListener() {
@@ -410,13 +428,24 @@ public class LocalWindow extends JFrame {
 
 		});
 
+		//the first item added is default
+		statisticType=(String) cbStatisticType.getItemAt(0); 
+
+		cbStatisticType.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub				
+				statisticType = (String) cbStatisticType.getSelectedItem();				
+			}			
+		});
+
 
 	}
-	
+
 	public String getFilePath() {
 		return outputFileName;
 	}
-	
+
 	public String getLayerName() {
 		return fileName;
 	}
