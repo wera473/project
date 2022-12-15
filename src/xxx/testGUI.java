@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.awt.LayoutManager;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import javax.swing.JFrame;
@@ -50,8 +51,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-
-
 import java.util.Scanner;
 
 import javax.swing.JTextField;
@@ -77,7 +76,9 @@ public class testGUI extends JFrame {
 	public int mapPanelX;
 	public int mapPanelY;
 	public int scale;	
-
+	
+	public Integer pixel;
+	public double values[][];
 	public int mousePrevX;
 	public int mousePrevY;
 
@@ -91,7 +92,7 @@ public class testGUI extends JFrame {
 	private JPanel statusbar;
 	
 	//Design Colors
-	Color perogi = new Color(254, 234, 132);
+	Color pierogi = new Color(254, 234, 132);
 	Color darkblue = new Color(	23, 34, 67);
 	Color lightblue  = new Color(76, 127, 200);
 
@@ -151,7 +152,7 @@ public class testGUI extends JFrame {
 
 		setBackground(new Color(255, 255, 255));
 		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Gebruiker\\OneDrive\\Documenten\\GitHub\\project\\src\\xxx\\perogi.jfif"));
-		setTitle("GIteSt");
+		setTitle("PieroGIS");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 800);
 
@@ -519,34 +520,28 @@ public class testGUI extends JFrame {
 		statusbar.setBackground(darkblue);
 		contentPane.add(statusbar);
 		
-		JLabel StatusBar = new JLabel("Status Bar");
-		StatusBar.setForeground(perogi);
+		JLabel StatusBar = new JLabel("Status Bar                ");
+		StatusBar.setForeground(pierogi);
 		StatusBar.setBackground(darkblue);
 		statusbar.add(StatusBar);
 		
 
 		JLabel lblNewLabel1 = new JLabel("");
-		lblNewLabel1.setForeground(perogi);
+		lblNewLabel1.setForeground(pierogi);
 		statusbar.add(lblNewLabel1);
 		
-		JSpinner scalebar = new JSpinner();
 		
-		scalebar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
-		});
-		statusbar.add(scalebar);
+		//TO DO, couldnt fix the Jspinner
+		//JSpinner scalebar = new JSpinner();
+		//statusbar.add(scalebar);
 		
-		JLabel cellval = new JLabel("Cell Value");
-		cellval.setForeground(perogi);
-		statusbar.add(cellval);
+		//JLabel cellval = new JLabel("Cell Value ="); // couldnt manage to show the values
+		//cellval.setForeground(pierogi);
+		//statusbar.add(cellval);
 		
-		JLabel cellid = new JLabel("Cell ID");
-		cellid.setForeground(perogi);
-		statusbar.add(cellid);
-
-		//lblNewLabel.setLayout((LayoutManager) new BoxLayout(lblNewLabel, BoxLayout.Y_AXIS));
+		//JLabel cellid = new JLabel("Cell ID");
+		//cellid.setForeground(pierogi);
+		//statusbar.add(cellid);
 
 		//---------------drag the map
 		contentPane.addMouseMotionListener(new MouseMotionListener() {
@@ -565,6 +560,7 @@ public class testGUI extends JFrame {
 
 				mapPanelX+=dx;
 				mapPanelY+=dy;
+				
 
 				// Set the position of the map
 				if(mapPanel!=null) {
@@ -580,15 +576,19 @@ public class testGUI extends JFrame {
 				// Handle the mouse move event
 				// Get the current mouse position
 				int x = e.getX();
-				int y = e.getY(); 
-
+				int y = e.getY();
+				
 				mousePrevX=x;
 				mousePrevY=y;
+				
+			//	pixel = hm.get(values);
+			
 
 				String displayText = (mousePrevX+" "+mousePrevY);
-
 				lblNewLabel.setText("X = "+e.getX()+" ; Y = "+e.getY());
 				lblNewLabel1.setText("X = "+e.getX()+" ; Y = "+e.getY());
+				//cellval.setText("Cell Value ="+pixel);//value
+				
 				// System.out.println(mousePrevX+" "+mousePrevY); 
 			}
 
