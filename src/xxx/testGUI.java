@@ -150,16 +150,17 @@ public class testGUI extends JFrame {
 	 */
 	public testGUI() {
 		
+		//SET ICON
 		icon = new ImageIcon(getClass().getResource("perogi.png"));
 		setBackground(new Color(255, 255, 255));
-		//setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Gebruiker\\OneDrive\\Documenten\\GitHub\\project\\bin\\xxx\\perogi.png"));
 		setIconImage(icon.getImage());
+		//setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Gebruiker\\OneDrive\\Documenten\\GitHub\\project\\bin\\xxx\\perogi.png"));
+		
+		//SET TITLE+FRAME
 		setTitle("PieroGIS");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 800);
 
-		//set icon
-		//image icon = Toolkit.getDefaultToolkit().getImage()
 
 		rootNode=new DefaultMutableTreeNode(null);
 		fileTreeModel=new DefaultTreeModel(rootNode);
