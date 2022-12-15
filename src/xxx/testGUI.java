@@ -70,7 +70,7 @@ public class testGUI extends JFrame {
 	public JTree fileTree;
 
 	JScrollPane fileWindow;
-
+	ImageIcon icon;
 	public ArrayList<Layer> layers;
 	public ArrayList<MapPanel> mapPanel;
 	public int mapPanelX;
@@ -149,9 +149,11 @@ public class testGUI extends JFrame {
 	 * Create the frame.
 	 */
 	public testGUI() {
-
+		
+		icon = new ImageIcon(getClass().getResource("perogi.png"));
 		setBackground(new Color(255, 255, 255));
-		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Gebruiker\\OneDrive\\Documenten\\GitHub\\project\\src\\xxx\\perogi.jfif"));
+		//setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Gebruiker\\OneDrive\\Documenten\\GitHub\\project\\bin\\xxx\\perogi.png"));
+		setIconImage(icon.getImage());
 		setTitle("PieroGIS");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 800);
