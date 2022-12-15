@@ -314,6 +314,7 @@ public class ZonalWindow extends JFrame {
 
 		//default file path
 		outputFileName=(String) fileChooser.getCurrentDirectory().getPath() + "\\zonaloperation.txt";
+		fileName="zonaloperation.txt";
 		tfOutputFile.setText(outputFileName);
 
 		btnOutputFile.addMouseListener(new MouseAdapter() {

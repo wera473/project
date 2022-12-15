@@ -232,6 +232,7 @@ public class FocalWindow extends JFrame {
 
 		//default file path
 		outputFileName=(String) fileChooser.getCurrentDirectory().getPath() + "\\focaloperation.txt";
+		fileName="focaloperation.txt";		
 		tfOutputFile.setText(outputFileName);
 
 		btnOutputFile.addMouseListener(new MouseAdapter() {

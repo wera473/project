@@ -359,6 +359,7 @@ public class LocalWindow extends JFrame {
 
 		//default file path
 		outputFileName=(String) fileChooser.getCurrentDirectory().getPath() + "\\localoperation.txt";
+		fileName="localoperation.txt";
 		tfOutputFile.setText(outputFileName);
 
 		btnOutputFile.addMouseListener(new MouseAdapter() {
