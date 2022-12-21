@@ -1,5 +1,6 @@
 package xxx;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -26,6 +27,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextPane;
 
@@ -39,6 +41,8 @@ public class ZonalWindow extends JFrame {
 	public String outputFileName;
 	public String fileName;
 	public String statisticType;
+	
+	public ImageIcon icon; 
 
 	public boolean isNew;
 
@@ -67,6 +71,8 @@ public class ZonalWindow extends JFrame {
 		setBounds(100, 100, 766, 382);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		icon = new ImageIcon("src//xxx//pierogis.png");
+		setIconImage(icon.getImage());
 
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();

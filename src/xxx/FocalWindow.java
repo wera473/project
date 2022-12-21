@@ -1,5 +1,6 @@
 package xxx;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -29,6 +30,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JTextField;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextPane;
 
@@ -36,7 +38,7 @@ public class FocalWindow extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField tfOutputFile;
-
+	public ImageIcon icon;
 	public String inputFile;
 	public String outputFileName;
 	public String fileName;
@@ -71,6 +73,8 @@ public class FocalWindow extends JFrame {
 		setBounds(100, 100, 862, 414);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		icon = new ImageIcon("src//xxx//pierogis.png");
+		setIconImage(icon.getImage());
 
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
